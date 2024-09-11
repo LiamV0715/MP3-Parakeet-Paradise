@@ -31,6 +31,8 @@ app.get('/', (req, res) => {
 // pets
 const petsController = require('./controllers/pet-controller.js');
 app.use('/pets', petsController);
+//refactor... what to put for pets
+
 
 // 404 Page
 app.get('*', (req, res) => {

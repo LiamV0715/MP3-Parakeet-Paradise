@@ -19,10 +19,7 @@ function Def (html) {
                             <a href="/">Home</a>
                         </li>
                         <li>
-                            <a href="/pets">Pets</a>
-                        </li>
-                        <li>
-                            <a href="/pets/new">Add a Pet!</a>
+                            <a href="/scoreboard">Scoreboard</a>
                         </li>
                     </ul>
                 </nav>

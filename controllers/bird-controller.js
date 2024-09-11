@@ -1,3 +1,6 @@
+//need to refactor and add new factors for scores
+
+
 const express = require("express");
 const pets = express.Router();
 const Pet = require("../models/pets.js");

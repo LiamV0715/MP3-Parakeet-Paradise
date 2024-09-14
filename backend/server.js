@@ -21,7 +21,7 @@ app.use(methodOverride('_method'));
 app.use(express.json());
 
 // MODELS
-const db = require('./models'); // Ensure models are properly required
+const db = require('./backend/models/index.js'); // Ensure models are properly required
 
 // ROUTES
 app.get('/', (req, res) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
-const scoreRoutes = require('./routes/scoreRoutes');
+const scoreRoutes = require('./routes/scoreboardRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bodyParser = require('body-parser');
 
@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

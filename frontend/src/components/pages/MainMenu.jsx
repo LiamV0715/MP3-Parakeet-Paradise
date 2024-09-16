@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './styles/MainMenu.scss';
+import '../styles/Menu.scss';
 
 const MainMenu = ({ user, setUser }) => {
   const [showModal, setShowModal] = useState(!user); // Show modal if user is not logged in

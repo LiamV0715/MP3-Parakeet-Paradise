@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Scoreboard.scss'; // Assuming you have a related SCSS file for styling
+import '../styles/Scoreboard.scss'; // Assuming you have a related SCSS file for styling
 
 const Scoreboard = ({ goToMainMenu }) => {
   const [activeTab, setActiveTab] = useState('cumulative');

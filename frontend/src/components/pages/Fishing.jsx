@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function FishingGame({ setPage }) {
+function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
   const [fishWeight, setFishWeight] = useState(0);
   const [showReelButton, setShowReelButton] = useState(false);
@@ -76,4 +76,4 @@ function FishingGame({ setPage }) {
   );
 }
 
-export default FishingGame;
+export default Fishing;

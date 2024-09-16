@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import './styles/Login.scss';
+// import axios from 'axios';  CONSIDER USING IF STUCK
+import '../styles/Login.scss';
 
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');

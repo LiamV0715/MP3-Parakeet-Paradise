@@ -5,11 +5,7 @@ const scoreRoutes = require('./routes/scoreRoutes');
 const authRoutes = require('./routes/authRoutes');
 const bodyParser = require('body-parser');
 
-// Start server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+const app = express();
 
 // Middleware
 app.use(bodyParser.json()); // For parsing application/json
@@ -23,9 +19,9 @@ mongoose.connect('mongodb://localhost/parakeets', {
 .catch(err => console.error('Failed to connect to MongoDB', err));
 
 // Routes
-app.use('/api/users', userRoutes); // Handles user-related routes
-app.use('/api/scores', scoreRoutes); // Handles score-related routes
-app.use('/api/auth', authRoutes); // Handles authentication routes
+app.use('/users', userRoutes); // Handles user-related routes
+app.use('/scores', scoreRoutes); // Handles score-related routes
+app.use('/auth', authRoutes); // Handles authentication routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -33,13 +29,8 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
-// Use the scoreboard routes
-app.use('/routes/scoreboardRoutes', scoreboardRoutes);
-
+// Start server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
-

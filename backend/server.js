@@ -1,45 +1,24 @@
-// DEPENDENCIES
+//DEPENDENCIES
 const express = require('express');
-const methodOverride = require('method-override');
 const mongoose = require('mongoose');
+const scoreboardRoutes = require('./routes/scoreboardRoutes');
 
-// CONFIGURATION
-require('dotenv').config();
-const PORT = process.env.PORT;
 const app = express();
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true },
-  () => { console.log('connected to mongo: ', process.env.MONGO_URI); }
-);
+const PORT = process.env.PORT || 5000;
 
-// MIDDLEWARE
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jsx');
-app.engine('jsx', require('express-react-views').createEngine());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use(methodOverride('_method'));
+// Connect to DB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+// Middleware to parse JSON requests
 app.use(express.json());
 
-// MODELS
-const db = require('./backend/models/index.js'); // Ensure models are properly required
+// Use the scoreboard routes
+app.use('/api/scoreboard', scoreboardRoutes);
 
-// ROUTES
-app.get('/', (req, res) => {
-  res.render('home');
-});
-
-// pets
-const petsController = require('./controllers/pet-controller.js');
-app.use('/pets', petsController);
-//refactor... what to put for pets
-
-
-// 404 Page
-app.get('*', (req, res) => {
-  res.send('404');
-});
-
-// LISTEN
 app.listen(PORT, () => {
-  console.log('open at port', PORT);
+  console.log(`Server running on port ${PORT}`);
 });
+

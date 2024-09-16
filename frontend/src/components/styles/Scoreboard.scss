@@ -1,0 +1,43 @@
+.scoreboard-container {
+    text-align: center;
+    .tabs {
+      button {
+        margin: 10px;
+        padding: 10px;
+        &.active {
+          background-color: #ffc107;
+        }
+      }
+    }
+    .score-list {
+      list-style-type: none;
+      padding: 0;
+      li {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        .parakeet-icon {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          margin-right: 10px;
+        }
+        .username {
+          flex-grow: 1;
+          text-align: left;
+        }
+        .score {
+          font-weight: bold;
+        }
+        .crown {
+          margin-right: 10px;
+          font-size: 20px;
+        }
+      }
+    }
+    .main-menu-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+    }
+  }
+  

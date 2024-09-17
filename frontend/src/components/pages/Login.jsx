@@ -5,14 +5,14 @@ import '../styles/Login.scss';
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [birdColor, setBirdColor] = useState('blue'); // Default blue parakeet for guests
+  const [bird_color, setBirdColor] = useState('blue'); // Default blue parakeet for guests
   const [error, setError] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const data = await registerUser(username, password, birdColor);
-      setUser({ username, birdColor });
+      const data = await registerUser(username, password, bird_color);
+      setUser({ username, bird_color });
       localStorage.setItem('token', data.token); // Save JWT token if available
     } catch (err) {
       setError(err.message); // Display the error message from authService
@@ -23,7 +23,7 @@ const Login = ({ setUser }) => {
     e.preventDefault();
     try {
       const data = await loginUser(username, password);
-      setUser({ username: data.username, birdColor: data.birdColor });
+      setUser({ username: data.username, bird_color: data.bird_color });
       localStorage.setItem('token', data.token);
     } catch (err) {
       setError(err.message); // Display the error message from authService
@@ -70,7 +70,7 @@ const Login = ({ setUser }) => {
         />
         <div className="bird-color-select">
           <label>Choose Your Bird Color:</label>
-          <select value={birdColor} onChange={(e) => setBirdColor(e.target.value)}>
+          <select value={bird_color} onChange={(e) => setBirdColor(e.target.value)}>
             <option value="blue">Blue</option>
             <option value="green">Green</option>
             <option value="pink">Pink</option>

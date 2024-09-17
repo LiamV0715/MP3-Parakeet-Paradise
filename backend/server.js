@@ -1,23 +1,27 @@
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
 const scoreRoutes = require('./routes/scoreboardRoutes');
 const authRoutes = require('./routes/authRoutes');
-const bodyParser = require('body-parser');
 
 const app = express();
 
-//send cors to the frontend
-const cors = require('cors');
+// CORS
 app.use(cors({
-    origin: 'http://localhost:3000', // /fishing? /surfing?
-    credentials: true,
+  origin: 'http://localhost:3000', // frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-
 // Middleware
-app.use(bodyParser.json()); // For parsing application/json
+app.use(express.json()); // For parsing application/json
+
+// Routes
+app.use('/api/auth', authRoutes); // Handles authentication routes
+app.use('/users', userRoutes); // Handles user-related routes
+app.use('/scores', scoreRoutes); // Handles score-related routes
 
 // Connect to MongoDB
 mongoose.connect('mongodb://localhost/parakeets', {
@@ -26,11 +30,6 @@ mongoose.connect('mongodb://localhost/parakeets', {
 })
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('Failed to connect to MongoDB', err));
-
-// Routes
-app.use('/users', userRoutes); // Handles user-related routes
-app.use('/scores', scoreRoutes); // Handles score-related routes
-app.use('/auth', authRoutes); // Handles authentication routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {

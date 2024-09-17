@@ -5,34 +5,39 @@ import '../styles/Login.scss';
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [birdColor, setBirdColor] = useState('blue'); // Default bird color for guests
+  const [birdColor, setBirdColor] = useState('blue'); // Default blue parakeet for guests
   const [error, setError] = useState('');
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/api/auth/register', {
-        username,
-        password,
-        birdColor,
-      });
-      setUser({ username, birdColor });
-      localStorage.setItem('token', response.data.token); // Save JWT token
-    } catch (err) {
-      setError('Error creating account. Please try again.');
-    }
-  };
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('/api/auth/login', { username, password });
-      setUser({ username: response.data.username, birdColor: response.data.birdColor });
-      localStorage.setItem('token', response.data.token);
-    } catch (err) {
-      setError('Invalid credentials. Please try again.');
-    }
-  };
+const handleRegister = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:5001/api/auth/register', {
+      username,
+      password,
+      birdColor,
+    });
+    setUser({ username, birdColor });
+    localStorage.setItem('token', response.data.token); // Save JWT token
+  } catch (err) {
+    setError('Error creating account. Please try again.');
+  }
+};
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await axios.post('http://localhost:5001/api/auth/login', {
+      username,
+      password,
+    });
+    setUser({ username: response.data.username, birdColor: response.data.birdColor });
+    localStorage.setItem('token', response.data.token);
+  } catch (err) {
+    setError('Invalid credentials. Please try again.');
+  }
+};
+
 
   return (
     <div className="login-container">

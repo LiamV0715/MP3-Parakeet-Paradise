@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
   const [fishWeight, setFishWeight] = useState(0);
   const [showReelButton, setShowReelButton] = useState(false);
   const [timer, setTimer] = useState(null);
+  const navigate = useNavigate(); 
+  const handleBackToMenu = () => {
+    navigate('/');  // Navigates to the main menu page
+  };
 
   const startGame = () => {
     setGameStatus("started");
@@ -69,7 +74,7 @@ function Fishing({ setPage }) {
         <div>
           <h1>Fish lost!</h1>
           <button onClick={startGame}>Retry</button>
-          <button onClick={() => setPage("menu")}>Main Menu</button>
+           <button onClick={handleBackToMenu}>Main Menu</button>
         </div>
       )}
     </div>

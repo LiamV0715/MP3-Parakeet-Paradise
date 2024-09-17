@@ -8,6 +8,14 @@ const bodyParser = require('body-parser');
 
 const app = express();
 
+//send cors to the frontend
+const cors = require('cors');
+app.use(cors({
+    origin: 'http://localhost:3000', // /fishing? /surfing?
+    credentials: true,
+}));
+
+
 // Middleware
 app.use(bodyParser.json()); // For parsing application/json
 

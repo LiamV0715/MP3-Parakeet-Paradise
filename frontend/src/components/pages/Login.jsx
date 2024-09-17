@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-// import axios from 'axios';  CONSIDER USING IF STUCK
+import axios from 'axios'; 
 import '../styles/Login.scss';
 
 const Login = ({ setUser }) => {

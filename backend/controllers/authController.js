@@ -1,20 +1,16 @@
-const User = require('../models/User'); // Assuming you have a User model defined
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User'); // Assuming you have a User model set up in mongoose
+const secret = process.env.JWT_SECRET; // Make sure to set this in your .env file
 
-// Environment variables for JWT secret
-const jwtSecret = process.env.JWT_SECRET;
-const tokenExpiration = '1h'; // Token expiration time
-
-// Register a new user (Sign Up)
-const registerUser = async (req, res) => {
+// User registration
+exports.register = async (req, res) => {
   const { username, password, birdColor } = req.body;
-
   try {
-    // Check if the username already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: 'Username already taken' });
+    // Check if the user already exists
+    let user = await User.findOne({ username });
+    if (user) {
+      return res.status(400).json({ message: 'Username already exists' });
     }
 
     // Hash the password
@@ -22,92 +18,46 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Create a new user
-    const newUser = new User({
+    user = new User({
       username,
       password: hashedPassword,
       birdColor,
     });
 
-    // Save the new user to the database
-    await newUser.save();
+    await user.save();
 
-    // Create JWT token
-    const token = jwt.sign({ id: newUser._id, username: newUser.username }, jwtSecret, { expiresIn: tokenExpiration });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '1h' });
 
-    // Respond with the token and user info
-    res.status(201).json({
-      message: 'User registered successfully',
-      token,
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        birdColor: newUser.birdColor,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(201).json({ token, username: user.username, birdColor: user.birdColor });
+  } catch (error) {
+    console.error('Error during registration:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 };
 
-// Log in an existing user
-const loginUser = async (req, res) => {
+// User login
+exports.login = async (req, res) => {
   const { username, password } = req.body;
-
   try {
     // Check if the user exists
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the provided password with the hashed password in the database
+    // Check if the password is correct
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Create JWT token
-    const token = jwt.sign({ id: user._id, username: user.username }, jwtSecret, { expiresIn: tokenExpiration });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, secret, { expiresIn: '1h' });
 
-    // Respond with the token and user info
-    res.status(200).json({
-      message: 'Logged in successfully',
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        birdColor: user.birdColor,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(200).json({ token, username: user.username, birdColor: user.birdColor });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
   }
-};
-
-// Get user info (Protected Route Example)
-const getUserProfile = async (req, res) => {
-  try {
-    // req.user is populated by the authMiddleware after decoding the JWT
-    const user = await User.findById(req.user.id).select('-password'); // Exclude the password field
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({
-      id: user._id,
-      username: user.username,
-      birdColor: user.birdColor,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-module.exports = {
-  registerUser,
-  loginUser,
-  getUserProfile,
 };

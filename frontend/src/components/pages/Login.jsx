@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios'; 
+import { registerUser, loginUser } from '../../services/authService';
 import '../styles/Login.scss';
 
 const Login = ({ setUser }) => {
@@ -8,36 +8,27 @@ const Login = ({ setUser }) => {
   const [birdColor, setBirdColor] = useState('blue'); // Default blue parakeet for guests
   const [error, setError] = useState('');
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await registerUser(username, password, birdColor);
+      setUser({ username, birdColor });
+      localStorage.setItem('token', data.token); // Save JWT token if available
+    } catch (err) {
+      setError(err.message); // Display the error message from authService
+    }
+  };
 
-const handleRegister = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post('http://localhost:5001/api/auth/register', {
-      username,
-      password,
-      birdColor,
-    });
-    setUser({ username, birdColor });
-    localStorage.setItem('token', response.data.token); // Save JWT token
-  } catch (err) {
-    setError('Error creating account. Please try again.');
-  }
-};
-
-const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post('http://localhost:5001/api/auth/login', {
-      username,
-      password,
-    });
-    setUser({ username: response.data.username, birdColor: response.data.birdColor });
-    localStorage.setItem('token', response.data.token);
-  } catch (err) {
-    setError('Invalid credentials. Please try again.');
-  }
-};
-
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await loginUser(username, password);
+      setUser({ username: data.username, birdColor: data.birdColor });
+      localStorage.setItem('token', data.token);
+    } catch (err) {
+      setError(err.message); // Display the error message from authService
+    }
+  };
 
   return (
     <div className="login-container">

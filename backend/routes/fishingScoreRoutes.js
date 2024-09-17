@@ -34,5 +34,5 @@ router.post('/', async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 });
-
+console.log('FishingScore routes loaded:', router);
 module.exports = router;

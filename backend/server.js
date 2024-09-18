@@ -28,19 +28,14 @@ app.use("/scores/fishing", fishingScoreRoutes); // Handles fishing score routes
 app.use("/scores/surfing", surfingScoreRoutes); // Handles surfing score routes
 
 // Connect to MongoDB
+console.log("MongoDB URI:", process.env.MONGO_URI);
 mongoose
-  .connect("mongodb://localhost/parakeet-paradise", {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Failed to connect to MongoDB", err));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
-});
 
 // Start server
 const PORT = process.env.PORT || 5001;

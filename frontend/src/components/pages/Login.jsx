@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import { registerUser, loginUser } from '../../services/authService';
+import { useNavigate } from 'react-router-dom';  // Add this
 import '../styles/Login.scss';
 
 const Login = ({ setUser }) => {
-  // State for login form
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-
-  // State for register form
-  const [registerUsername, setRegisterUsername] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [bird_color, setBirdColor] = useState('blue'); // Default blue parakeet for guests
   const [error, setError] = useState('');
+  const navigate = useNavigate();  // Initialize navigate
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const data = await registerUser(registerUsername, registerPassword, bird_color);
-      setUser({ username: registerUsername, bird_color });
+      const data = await registerUser(username, password, bird_color);
+      setUser({ username, bird_color }); // Call setUser correctly
       localStorage.setItem('token', data.token); // Save JWT token if available
+      navigate('/');  // Redirect to MainMenu after registration
     } catch (err) {
       setError(err.message); // Display the error message from authService
     }
@@ -27,9 +25,10 @@ const Login = ({ setUser }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginUser(loginUsername, loginPassword);
+      const data = await loginUser(username, password);
       setUser({ username: data.username, bird_color: data.bird_color });
       localStorage.setItem('token', data.token);
+      navigate('/');  // Redirect to MainMenu after login
     } catch (err) {
       setError(err.message); // Display the error message from authService
     }
@@ -42,34 +41,34 @@ const Login = ({ setUser }) => {
       <form onSubmit={handleLogin}>
         <input
           type="text"
-          value={loginUsername}
-          onChange={(e) => setLoginUsername(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           className="login-input"
         />
         <input
           type="password"
-          value={loginPassword}
-          onChange={(e) => setLoginPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           className="login-input"
         />
         <button type="submit" className="login-button">Log In</button>
       </form>
 
-      <h2>Don't have an account? Register</h2>
+      <h2>Don't have an account? Sign up!</h2>
       <form onSubmit={handleRegister}>
         <input
           type="text"
-          value={registerUsername}
-          onChange={(e) => setRegisterUsername(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           className="login-input"
         />
         <input
           type="password"
-          value={registerPassword}
-          onChange={(e) => setRegisterPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           className="login-input"
         />

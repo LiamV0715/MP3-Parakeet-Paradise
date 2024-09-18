@@ -12,6 +12,8 @@ export const registerUser = async (username, password, birdColor) => {
     });
     return response.data;
   } catch (error) {
+    // Log the full error response for debugging
+    console.error('Register User Error:', error.response ? error.response.data : error.message);
     throw new Error('Error creating account. Please try again.');
   }
 };
@@ -25,6 +27,8 @@ export const loginUser = async (username, password) => {
     });
     return response.data;
   } catch (error) {
+    // Log the full error response for debugging
+    console.error('Login User Error:', error.response ? error.response.data : error.message);
     throw new Error('Invalid credentials. Please try again.');
   }
 };

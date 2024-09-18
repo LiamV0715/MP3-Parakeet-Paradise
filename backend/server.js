@@ -29,7 +29,7 @@ app.use("/scores/surfing", surfingScoreRoutes); // Handles surfing score routes
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost/parakeets", {
+  .connect("mongodb://localhost/parakeet-paradise", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

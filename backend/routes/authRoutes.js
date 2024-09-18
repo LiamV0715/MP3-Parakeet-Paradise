@@ -15,34 +15,31 @@ const generateToken = (user) => {
   );
 };
 
-// User registration
+//REGISTER NEW USER
 router.post("/signup", async (req, res) => {
-  const { username, password, birdColor } = req.body;
-
-  try {
-    // Check if the user already exists
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+    const { username, password, birdColor } = req.body;
+  
+    try {
+      const existingUser = await User.findOne({ username });
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new User({ username, password: hashedPassword, birdColor });
+  
+      console.log("User to be saved:", newUser); // Log the user object
+      const savedUser = await newUser.save();
+      console.log("Saved user:", savedUser); // Log the saved user
+  
+      const token = generateToken(newUser);
+      res.status(201).json({ message: "Signup successful", user: savedUser, token });
+    } catch (err) {
+      console.error("Error during signup:", err);
+      res.status(500).json({ message: "Server error during signup" });
     }
-
-    // Hash the password before saving it
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Create a new user
-    const newUser = new User({ username, password: hashedPassword, birdColor });
-    await newUser.save();
-
-    // Generate a JWT token
-    const token = generateToken(newUser);
-
-    res
-      .status(201)
-      .json({ message: "Signup successful", user: newUser, token });
-  } catch (err) {
-    res.status(500).json({ message: "Server error during signup" });
-  }
-});
+  });
+  
 
 // User login
 router.post("/login", async (req, res) => {

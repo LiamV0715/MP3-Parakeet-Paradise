@@ -3,16 +3,21 @@ import { registerUser, loginUser } from '../../services/authService';
 import '../styles/Login.scss';
 
 const Login = ({ setUser }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  // State for login form
+  const [loginUsername, setLoginUsername] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+
+  // State for register form
+  const [registerUsername, setRegisterUsername] = useState('');
+  const [registerPassword, setRegisterPassword] = useState('');
   const [bird_color, setBirdColor] = useState('blue'); // Default blue parakeet for guests
   const [error, setError] = useState('');
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const data = await registerUser(username, password, bird_color);
-      setUser({ username, bird_color });
+      const data = await registerUser(registerUsername, registerPassword, bird_color);
+      setUser({ username: registerUsername, bird_color });
       localStorage.setItem('token', data.token); // Save JWT token if available
     } catch (err) {
       setError(err.message); // Display the error message from authService
@@ -22,7 +27,7 @@ const Login = ({ setUser }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginUser(username, password);
+      const data = await loginUser(loginUsername, loginPassword);
       setUser({ username: data.username, bird_color: data.bird_color });
       localStorage.setItem('token', data.token);
     } catch (err) {
@@ -37,15 +42,15 @@ const Login = ({ setUser }) => {
       <form onSubmit={handleLogin}>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={loginUsername}
+          onChange={(e) => setLoginUsername(e.target.value)}
           placeholder="Username"
           className="login-input"
         />
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={loginPassword}
+          onChange={(e) => setLoginPassword(e.target.value)}
           placeholder="Password"
           className="login-input"
         />
@@ -56,15 +61,15 @@ const Login = ({ setUser }) => {
       <form onSubmit={handleRegister}>
         <input
           type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          value={registerUsername}
+          onChange={(e) => setRegisterUsername(e.target.value)}
           placeholder="Username"
           className="login-input"
         />
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={registerPassword}
+          onChange={(e) => setRegisterPassword(e.target.value)}
           placeholder="Password"
           className="login-input"
         />

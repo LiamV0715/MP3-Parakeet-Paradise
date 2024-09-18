@@ -12,9 +12,14 @@ function Fishing({ setPage }) {
   };
 
   const startGame = () => {
+    if (timer) {
+      clearTimeout(timer); // Clear the previous timer when restarting the game
+    }
     setGameStatus("started");
+    setShowReelButton(false); // Reset reel button visibility
     const delay = Math.floor(Math.random() * 10000);
-    setTimer(setTimeout(() => setShowReelButton(true), delay));
+    const newTimer = setTimeout(() => setShowReelButton(true), delay);
+    setTimer(newTimer);
   };
 
   const handleReelClick = async () => {
@@ -56,7 +61,7 @@ function Fishing({ setPage }) {
         }
       }, 250); // 1/4 second to click
     }
-  }, [showReelButton]);
+  }, [showReelButton, gameStatus]);
 
   return (
     <div className="fishing-game">
@@ -74,7 +79,7 @@ function Fishing({ setPage }) {
         <div>
           <h1>Fish lost!</h1>
           <button onClick={startGame}>Retry</button>
-           <button onClick={handleBackToMenu}>Main Menu</button>
+          <button onClick={handleBackToMenu}>Main Menu</button>
         </div>
       )}
     </div>

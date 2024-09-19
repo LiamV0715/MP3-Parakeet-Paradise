@@ -15,7 +15,6 @@ const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
-          console.log('token detected')
           const response = await fetch('http://localhost:5001/api/auth/me', {  
             headers: {
               'Content-Type': 'application/json',
@@ -51,11 +50,9 @@ const AuthProvider = ({ children }) => {
         body: JSON.stringify({ username, password }),
       });
       const data = await response.json();
-      console.log('json response found')
       if (response.ok) {
         localStorage.setItem('token', data.token);
-        setAuthState({ isAuthenticated: true, user: data });
-        console.log(data)
+        setAuthState({ isAuthenticated: true, loading: false, user: data });
       } else {
         console.error('Login failed:', data.message);
       }

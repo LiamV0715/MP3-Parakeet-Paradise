@@ -62,16 +62,23 @@ exports.login = async (req, res) => {
   }
 };
 
-// Get user information
+
+// Get user information using JWT token payload only
 exports.getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId).select('-password'); // Exclude password
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    // Extract user data from JWT payload
+    const { username, birdColor } = req.user.username; // Ensure req.user exists and contains necessary data
+    
+    if (!username || !birdColor) {
+      return res.status(401).json({ message: 'Unauthorized. Invalid token.' });
     }
-    res.json({ username: user.username, birdColor: user.birdColor });
+
+    // Respond with the user data directly from the JWT token
+    res.json({ username, birdColor });
   } catch (error) {
     console.error('Error fetching user info:', error);
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 };
+
+

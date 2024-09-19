@@ -13,22 +13,19 @@ const App = () => {
 
   // Redirect user to login page if not logged in
   useEffect(() => {
-    if (!authState.isAuthenticated && window.location.pathname !== '/login') {
+    if (!authState.loading && !authState.isAuthenticated && window.location.pathname !== '/login') {
       navigate('/login');
+      console.log("no authentication detected")
     }
-  }, [authState.isAuthenticated, navigate]);
+  }, [authState.isAuthenticated, authState.loading, navigate]);
 
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      {authState.isAuthenticated && (
-        <>
-          <Route path="/" element={<MainMenu />} />
-          <Route path="/surfing" element={<Surfing />} />
-          <Route path="/fishing" element={<Fishing />} />
-          <Route path="/scoreboard" element={<Scoreboard />} />
-        </>
-      )}
+      <Route path="/" element={<MainMenu />} />
+      <Route path="/surfing" element={<Surfing />} />
+      <Route path="/fishing" element={<Fishing />} />
+      <Route path="/scoreboard" element={<Scoreboard />} />
     </Routes>
   );
 };

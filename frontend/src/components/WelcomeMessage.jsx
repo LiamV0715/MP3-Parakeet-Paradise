@@ -1,19 +1,23 @@
 // src/components/WelcomeMessage.jsx
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext"; // Import UserContext
+import React, { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const WelcomeMessage = () => {
   const { authState } = useContext(AuthContext);
-  console.log(authState)
-  let loginActions = (<></>)
-  if (authState) {
-    loginActions = (
-      <div className="welcome-message">Have fun in paradise, {authState.user.username}!</div>
-    );
+
+  if (authState.loading) {
+    return <div>Loading...</div>; // Show loading while fetching user
   }
+
+  if (!authState.isAuthenticated || !authState.user) {
+    return <div>Please log in for all features</div>;
+  }
+
   return (
-   <> {loginActions}</>
-  )
+    <div className="welcome-message">
+      Have fun in paradise, {authState.user.username}!
+    </div>
+  );
 };
 
 export default WelcomeMessage;

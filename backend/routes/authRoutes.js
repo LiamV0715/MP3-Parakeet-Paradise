@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs'); 
 const authController = require("../controllers/authController");
 const authenticate = require("../middleware/authMiddleware");
-
+const passport = require('passport');
 // Import secret from environment variables
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -72,7 +72,16 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// Get user information
-router.get("/me", authenticate, authController.getMe);
+//find a user and keep their session authenticated
+router.get('/me', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    console.log(req.user)
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server error');
+  }
+});
 
 module.exports = router;

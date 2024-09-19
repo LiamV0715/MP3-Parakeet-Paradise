@@ -8,10 +8,10 @@ import "./index.scss";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <React.StrictMode>
-      <AuthProvider>
+    <AuthProvider>
+      <React.StrictMode>
         <App />
-      </AuthProvider>
-    </React.StrictMode>
+      </React.StrictMode>
+    </AuthProvider>
   </BrowserRouter>
 );

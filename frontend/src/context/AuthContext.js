@@ -15,6 +15,7 @@ const AuthProvider = ({ children }) => {
       try {
         const token = localStorage.getItem('token');
         if (token) {
+          console.log('token detected')
           const response = await fetch('http://localhost:5001/api/auth/me', {  
             headers: {
               'Content-Type': 'application/json',

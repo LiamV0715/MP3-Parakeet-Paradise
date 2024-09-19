@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Menu.scss';
 import WelcomeMessage from '../WelcomeMessage';
+import BirdImage from '../BirdImage'; 
+
 
 const MainMenu = ({ user, setUser }) => {
   const [showModal, setShowModal] = useState(!user); // Show modal if user is not logged in
@@ -39,6 +41,7 @@ const MainMenu = ({ user, setUser }) => {
       <button className="menu-button" onClick={user ? handleLogout : () => window.location.href = '/login'}>
         {user ? 'Log Out' : 'Log In'}
       </button>
+      <BirdImage /> 
     </div>
   );
 };

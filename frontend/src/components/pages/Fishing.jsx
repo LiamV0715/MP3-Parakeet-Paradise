@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import WelcomeMessage from '../WelcomeMessage';
 import '../styles/Fishing.scss'
+
 function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
   const [fishWeight, setFishWeight] = useState(0);

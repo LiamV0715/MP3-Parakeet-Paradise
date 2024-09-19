@@ -1,60 +1,68 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
+import axios from 'axios'; // Using axios for consistent API calls
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
-    loading: true,
+    loading: true,  // Keep track of loading state
     user: null, 
   });
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const response = await fetch('http://localhost:5001/api/auth/me', {  
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
+  // Fetch user data from the server using the JWT token
+  const fetchUser = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const response = await axios.get('http://localhost:5001/api/auth/me', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          // Set user data, authentication status, and stop loading
+          setAuthState({
+            isAuthenticated: true,
+            loading: false,
+            user: response.data,  // Response from Passport should include the user data
           });
-          if (response.ok) {
-            const data = await response.json();
-            setAuthState({ isAuthenticated: true, loading: false, user: data.user });
-          } else {
-            setAuthState({ isAuthenticated: false, loading: false, user: null });
-            localStorage.removeItem('token');
-          }
         } else {
+          // If token is invalid, clear auth state and token
           setAuthState({ isAuthenticated: false, loading: false, user: null });
+          localStorage.removeItem('token');
         }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
+      } else {
+        // No token in localStorage
         setAuthState({ isAuthenticated: false, loading: false, user: null });
       }
-    };
+    } catch (error) {
+      console.error('Failed to fetch user:', error);
+      setAuthState({ isAuthenticated: false, loading: false, user: null });
+    }
+  };
 
-    fetchUser();
+  useEffect(() => {
+    fetchUser(); // Fetch user data when the component mounts
   }, []);
 
   const login = async (username, password) => {
     try {
-      const response = await fetch('http://localhost:5001/api/auth/login', {  
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
+      const response = await axios.post('http://localhost:5001/api/auth/login', {
+        username,
+        password,
       });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('token', data.token);
-        setAuthState({ isAuthenticated: true, loading: false, user: data });
+
+      if (response.status === 200) {
+        const { token, user } = response.data;  // Assuming your backend returns token & user
+        localStorage.setItem('token', token);   // Store token in localStorage
+
+        // Update authState with user data
+        setAuthState({ isAuthenticated: true, loading: false, user });
       } else {
-        console.error('Login failed:', data.message);
+        console.error('Login failed:', response.data.message);
       }
     } catch (error) {
       console.error('Login failed', error);
@@ -62,25 +70,23 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token');  // Remove token on logout
     setAuthState({ isAuthenticated: false, user: null });
   };
 
   const signup = async (username, password, birdColor) => {
     try {
-      const response = await fetch('http://localhost:5001/api/auth/signup', {  
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password, birdColor }),
+      const response = await axios.post('http://localhost:5001/api/auth/signup', {
+        username,
+        password,
+        birdColor,
       });
 
-      if (response.ok) {
-        await login(username, password); // Automatically log in after registration
+      if (response.status === 200) {
+        // Automatically log the user in after a successful registration
+        await login(username, password);
       } else {
-        const data = await response.json();
-        console.error('Registration failed:', data.message);
+        console.error('Registration failed:', response.data.message);
       }
     } catch (error) {
       console.error('Registration failed', error);

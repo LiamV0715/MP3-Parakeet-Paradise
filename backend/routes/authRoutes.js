@@ -77,7 +77,10 @@ router.get('/me', passport.authenticate('jwt', { session: false }), async (req, 
   try {
     const user = await User.findById(req.user.id).select('-password');
     console.log(req.user)
-    res.json(user);
+    res.jsonres.json({
+      username: user.username,
+      birdColor: user.birdColor,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');

@@ -3,9 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
-const authRoutes = require("./routes/authRoutes");
+const authRoutes = require('./routes/authRoutes'); 
+
 const fishingScoreRoutes = require("./routes/fishingScoreRoutes");
 const surfingScoreRoutes = require("./routes/surfingScoreRoutes");
+const bcrypt = require('bcryptjs'); 
 
 const app = express();
 
@@ -26,6 +28,7 @@ app.use("/api/auth", authRoutes); // Handles authentication routes
 app.use("/users", userRoutes); // Handles user-related routes
 app.use("/scores/fishing", fishingScoreRoutes); // Handles fishing score routes
 app.use("/scores/surfing", surfingScoreRoutes); // Handles surfing score routes
+
 
 // Connect to MongoDB
 console.log("MongoDB URI:", process.env.MONGO_URI);

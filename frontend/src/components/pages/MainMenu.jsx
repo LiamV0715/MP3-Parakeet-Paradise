@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Menu.scss';
+import WelcomeMessage from '../WelcomeMessage';
 
 const MainMenu = ({ user, setUser }) => {
   const [showModal, setShowModal] = useState(!user); // Show modal if user is not logged in
@@ -20,7 +21,7 @@ const MainMenu = ({ user, setUser }) => {
 
   return (
     <div className="main-menu-container">
-      {user && <p className="welcome-message">Welcome, {user.username}!</p>}
+      <WelcomeMessage />
 
       {showModal && (
         <div className="account-modal">

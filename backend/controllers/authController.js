@@ -1,7 +1,7 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/User'); // Assuming you have a User model set up in mongoose
-const secret = process.env.JWT_SECRET; // Make sure to set this in your .env file
+const User = require('../models/User'); 
+const secret = process.env.JWT_SECRET; 
 
 // User registration
 exports.register = async (req, res) => {
@@ -58,6 +58,20 @@ exports.login = async (req, res) => {
     res.status(200).json({ token, username: user.username, birdColor: user.birdColor });
   } catch (error) {
     console.error('Error during login:', error);
+    res.status(500).json({ message: 'Server error. Please try again later.' });
+  }
+};
+
+// Get user information
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select('-password'); // Exclude password
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ username: user.username, birdColor: user.birdColor });
+  } catch (error) {
+    console.error('Error fetching user info:', error);
     res.status(500).json({ message: 'Server error. Please try again later.' });
   }
 };

@@ -1,42 +1,39 @@
-import React, { useState } from 'react';
-import { registerUser, loginUser } from '../../services/authService';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Login.scss';
 
-const Login = ({ setUser }) => {
+const Login = () => {
+  const { login, register } = useContext(AuthContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [bird_color, setBirdColor] = useState('blue'); // Default blue parakeet for guests
+  const [birdColor, setBirdColor] = useState('blue');
   const [error, setError] = useState('');
-  const [isRegistering, setIsRegistering] = useState(false); // State for showing register form
-  const navigate = useNavigate(); // Initialize navigate
+  const [isRegistering, setIsRegistering] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const data = await registerUser(username, password, bird_color);
-      setUser({ username, bird_color }); // Call setUser correctly
-      localStorage.setItem('token', data.token); // Save JWT token if available
-      navigate('/'); // Redirect to MainMenu after registration
+      await register(username, password, birdColor);
+      navigate('/');
     } catch (err) {
-      setError(err.message); // Display the error message from authService
+      setError(err.message);
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await loginUser(username, password);
-      setUser({ username: data.username, bird_color: data.bird_color });
-      localStorage.setItem('token', data.token);
-      navigate('/'); // Redirect to MainMenu after login
+      await login(username, password);
+      navigate('/');
     } catch (err) {
-      setError(err.message); // Display the error message from authService
+      setError(err.message);
     }
   };
-
+  // cosmetics for registering go in this top block, login/register toggle visibility
   return (
-    <div className="login-container">
+    <div className="login-container"> 
       {isRegistering ? (
         <>
           <h2>Don't have an account? Sign up!</h2>
@@ -60,7 +57,7 @@ const Login = ({ setUser }) => {
             />
             <div className="bird-color-select">
               <label>Choose Your Bird Color:</label>
-              <select value={bird_color} onChange={(e) => setBirdColor(e.target.value)}>
+              <select value={birdColor} onChange={(e) => setBirdColor(e.target.value)}>
                 <option value="blue">Blue</option>
                 <option value="green">Green</option>
                 <option value="pink">Pink</option>
@@ -99,7 +96,6 @@ const Login = ({ setUser }) => {
         </>
       )}
     </div>
-  );
-};
+  )};
 
-export default Login;
+  export default Login

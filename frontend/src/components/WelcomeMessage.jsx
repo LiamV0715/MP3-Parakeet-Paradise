@@ -8,7 +8,7 @@ const WelcomeMessage = () => {
   let loginActions = (<></>)
   if (authState) {
     loginActions = (
-      <div className="welcome-message">Welcome, {authState.user.username}!</div>
+      <div className="welcome-message">Have fun in paradise, {authState.user.username}!</div>
     );
   }
   return (

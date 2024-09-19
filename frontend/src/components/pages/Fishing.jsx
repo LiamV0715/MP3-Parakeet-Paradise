@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import WelcomeMessage from '../WelcomeMessage';
 
 function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
@@ -7,6 +8,7 @@ function Fishing({ setPage }) {
   const [showReelButton, setShowReelButton] = useState(false);
   const [timer, setTimer] = useState(null);
   const navigate = useNavigate(); 
+
   const handleBackToMenu = () => {
     navigate('/');  // Navigates to the main menu page
   };
@@ -22,9 +24,20 @@ function Fishing({ setPage }) {
     setTimer(newTimer);
   };
 
+  // Generate a fish weight using a bell curve distribution
+  const generateFishWeight = () => {
+    let sum = 0;
+    const rolls = 6;  // Number of dice rolls for bell curve logic
+    for (let i = 0; i < rolls; i++) {
+      sum += Math.random();
+    }
+    // Normalize the result to be between 1 and 50
+    return Math.floor((sum / rolls) * 50) + 1;
+  };
+
   const handleReelClick = async () => {
     if (gameStatus === "started") {
-      const weight = Math.floor(Math.random() * 20) + 1;
+      const weight = generateFishWeight();  // Use bell curve logic
       setFishWeight(weight);
       setGameStatus("won");
 
@@ -36,11 +49,11 @@ function Fishing({ setPage }) {
   const submitScore = async (weight) => {
     try {
       const token = localStorage.getItem("token"); // Retrieve JWT token from localStorage
-      const response = await fetch("/api/fish-score", {
+      const response = await fetch("http://localhost:5001/api/fish-score", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Attach the JWT token
+          Authorization: `Bearer ${token}`, // Attach the JWT token to the score
         },
         body: JSON.stringify({
           fishWeight: weight,
@@ -65,6 +78,7 @@ function Fishing({ setPage }) {
 
   return (
     <div className="fishing-game">
+      <WelcomeMessage />
       {gameStatus === "waiting" && <button onClick={startGame}>Start Game</button>}
       {gameStatus === "started" && showReelButton && (
         <button onClick={handleReelClick} className="reel-button">REEL IT!</button>

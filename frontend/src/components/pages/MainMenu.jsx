@@ -80,7 +80,7 @@ const MainMenu = () => {
 
       
       </div>
-      <BirdImage className='bird-image'/>
+      <BirdImage className='bird-image-menu'/>
     </div>
   );
 };

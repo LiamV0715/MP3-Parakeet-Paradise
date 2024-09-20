@@ -1,3 +1,12 @@
+h1 {
+    margin-top: 10px;
+}
+
+h2 {
+    margin-top: 10px;
+}
+
+
 .transparent-video {
     position: absolute;
     width: 100%;
@@ -32,6 +41,7 @@
      background-color: aquamarine;
      padding-top: 5px;
      padding-bottom: 5px;
+     margin-top: 10%;
 }
 
 p {
@@ -39,19 +49,21 @@ p {
 }
 
 
-.bird-image {
-     z-index: 2; /* Lower z-index to ensure BirdImage is under the GIF */
-    position: absolute;
-    left: -100px;
+.bird-image-menu {
+    z-index: 2; /* Lower z-index to ensure BirdImage is under the GIF */
+   position: absolute;
+   left: -100px;
+   max-height: 50%;
 }
 
 .bird-container {
-    z-index: 2; /* Lower z-index to ensure BirdImage is under the GIF */
-    position: absolute;
-    left: -100px;
-    padding-bottom: 20px;
-    
+   z-index: 2; /* Lower z-index to ensure BirdImage is under the GIF */
+   position: absolute;
+   left: -100px;
+   padding-bottom: 20px;
+   
 }
+
 
 
 .background-vid {
@@ -72,6 +84,8 @@ p {
 button {
     background-color: aqua;
     padding: 10px;
+    border-color: coral;
+    margin-top: 30px;
     border-radius: 25px;
     color: white;
     font-size: 20px;

@@ -50,25 +50,27 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (username, password) => {
-    try {
-      const response = await axios.post('http://localhost:5001/api/auth/login', {
-        username,
-        password,
-      });
+  try {
+    const response = await axios.post('http://localhost:5001/api/auth/login', {
+      username,
+      password,
+    });
 
-      if (response.status === 200) {
-        const { token, user } = response.data;  // Assuming your backend returns token & user
-        localStorage.setItem('token', token);   // Store token in localStorage
+    if (response.status === 200) {
+      const { token, user } = response.data;  // Assuming your backend returns token & user
+      localStorage.setItem('token', token);   // Store token in localStorage
 
-        // Update authState with user data
-        setAuthState({ isAuthenticated: true, loading: false, user: { ...user, token } }); // Include token in user object
-      } else {
-        console.error('Login failed:', response.data.message);
-      }
-    } catch (error) {
-      console.error('Login failed', error);
+      // Update authState and immediately fetch user data
+      setAuthState({ isAuthenticated: true, loading: true, user: { ...user, token } }); // Mark loading true
+      await fetchUser(); // Fetch fresh user data
+    } else {
+      console.error('Login failed:', response.data.message);
     }
-  };
+  } catch (error) {
+    console.error('Login failed', error);
+  }
+};
+
 
   const logout = () => {
     localStorage.removeItem('token');  // Remove token on logout

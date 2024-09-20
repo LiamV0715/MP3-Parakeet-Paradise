@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import '../styles/Login.scss';
 
 const Login = () => {
-  const { login, register } = useContext(AuthContext);
+  const { login, signup } = useContext(AuthContext); // Change here
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [birdColor, setBirdColor] = useState('blue');
@@ -15,7 +15,7 @@ const Login = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await register(username, password, birdColor);
+      await signup(username, password, birdColor); // Change here
       navigate('/');
     } catch (err) {
       setError(err.message);
@@ -31,7 +31,7 @@ const Login = () => {
       setError(err.message);
     }
   };
-  // cosmetics for registering go in this top block, login/register toggle visibility
+
   return (
     <div className="login-container"> 
       {isRegistering ? (
@@ -88,7 +88,6 @@ const Login = () => {
             />
             <button type="submit" className="login-button">Log In</button>
           </form>
-
           <h2>Don't have an account? Sign up!</h2>
           <button onClick={() => setIsRegistering(true)} className="toggle-register-button">
             Register
@@ -96,6 +95,7 @@ const Login = () => {
         </>
       )}
     </div>
-  )};
+  );
+};
 
-  export default Login
+export default Login;

@@ -1,8 +1,9 @@
-import React, { useState, useContext } from 'react';
-import '../styles/Menu.scss';
-import WelcomeMessage from '../WelcomeMessage';
-import BirdImage from '../BirdImage';
-import { AuthContext } from '../../context/AuthContext'; // Import AuthContext
+import React, { useState, useContext } from "react";
+import "../styles/Menu.scss";
+import WelcomeMessage from "../WelcomeMessage";
+import BirdImage from "../BirdImage";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
+import VHSintro from "../../assets/videos/VHSbig.gif";
 
 const MainMenu = () => {
   const { authState, setAuthState } = useContext(AuthContext); // Access authState from AuthContext
@@ -10,20 +11,29 @@ const MainMenu = () => {
 
   const handleLogout = () => {
     setAuthState({ isAuthenticated: false, user: null });
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
   };
 
   const handleGuestPlay = () => {
-    setAuthState({ isAuthenticated: true, user: { username: 'Guest', birdColor: 'blue' } });
+    setAuthState({
+      isAuthenticated: true,
+      user: { username: "Guest", birdColor: "blue" },
+    });
     setShowModal(false);
   };
 
   const handleAccountCreation = () => {
-    window.location.href = '/login'; // Redirect to login/register page
+    window.location.href = "/login"; // Redirect to login/register page
   };
 
   return (
     <div className="main-menu-container">
+      <div className="video-container">
+      
+        <img src={VHSintro} alt="Filter Animation" className="transparent-video" />
+      
+        </div>
+      <div className='behind-video'>
       <WelcomeMessage />
 
       {showModal && (
@@ -35,15 +45,38 @@ const MainMenu = () => {
       )}
 
       <h1>Main Menu</h1>
-      <button className="menu-button" onClick={() => window.location.href = '/surfing'}>Go Surfing!</button>
-      <button className="menu-button" onClick={() => window.location.href = '/fishing'}>Go Fishing!</button>
-      <button className="menu-button" onClick={() => window.location.href = '/scoreboards'}>Scoreboards</button>
-
-      <button className="menu-button" onClick={authState.user ? handleLogout : () => window.location.href = '/login'}>
-        {authState.user ? 'Log Out' : 'Log In'}
+      <button
+        className="menu-button"
+        onClick={() => (window.location.href = "/surfing")}
+      >
+        Go Surfing!
       </button>
-      
-      <BirdImage />
+      <button
+        className="menu-button"
+        onClick={() => (window.location.href = "/fishing")}
+      >
+        Go Fishing!
+      </button>
+      <button
+        className="menu-button"
+        onClick={() => (window.location.href = "/scoreboards")}
+      >
+        Scoreboards
+      </button>
+
+      <button
+        className="menu-button"
+        onClick={
+          authState.user
+            ? handleLogout
+            : () => (window.location.href = "/login")
+        }
+      >
+        {authState.user ? "Log Out" : "Log In"}
+      </button>
+
+      <BirdImage className='bird-image'/>
+      </div>
     </div>
   );
 };

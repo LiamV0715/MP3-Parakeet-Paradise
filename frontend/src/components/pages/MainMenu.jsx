@@ -4,6 +4,7 @@ import WelcomeMessage from "../WelcomeMessage";
 import BirdImage from "../BirdImage";
 import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 import VHSintro from "../../assets/videos/VHSbig.gif";
+import backVid from "../../assets/videos/beach.gif"
 
 const MainMenu = () => {
   const { authState, setAuthState } = useContext(AuthContext); // Access authState from AuthContext
@@ -33,7 +34,9 @@ const MainMenu = () => {
         <img src={VHSintro} alt="Filter Animation" className="transparent-video" />
       
         </div>
+        <img src={backVid} alt="Beach Animation" className="background-vid" />
       <div className='behind-video'>
+
       <WelcomeMessage />
 
       {showModal && (
@@ -75,8 +78,9 @@ const MainMenu = () => {
         {authState.user ? "Log Out" : "Log In"}
       </button>
 
-      <BirdImage className='bird-image'/>
+      
       </div>
+      <BirdImage className='bird-image'/>
     </div>
   );
 };

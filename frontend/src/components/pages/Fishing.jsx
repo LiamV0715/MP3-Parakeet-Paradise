@@ -96,7 +96,7 @@ function Fishing({ setPage }) {
         <div>
           <h1>You caught a {fishWeight} lb fish!</h1>
           <img src={getFishImage(fishWeight)} alt="Caught fish" className="fish-image" />
-          <button onClick={() => setPage("menu")}>Main Menu</button>
+          <button onClick={handleBackToMenu}>Main Menu</button>
         </div>
       )}
       {gameStatus === "lost" && (

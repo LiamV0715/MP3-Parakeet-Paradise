@@ -12,9 +12,9 @@ router.post(
       const { fishWeight } = req.body; // Get fishWeight from request body
       const userId = req.user._id; // Get user ID from the JWT
 
-      // Find user's current score and update it only if the new fishWeight is bigger
+      // Use findOneAndUpdate to either update or create the fish score for the user
       const updatedFishScore = await FishScore.findOneAndUpdate(
-        { user: userId }, // Find the existing score by user ID
+        { user: userId }, // Query by user ID
         { $max: { fishWeight: Number(fishWeight) } }, // Update only if the new fishWeight is larger
         { new: true, upsert: true } // Upsert will create a new score if one doesn't exist
       );

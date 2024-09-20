@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Surfing.scss';
+import BirdImage from "../BirdImage";
 
-const SurfingMiniGame = ({ birdImage }) => {
+const SurfingMiniGame = ({ BirdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [progress, setProgress] = useState(0);
   const [score, setScore] = useState(0);
@@ -12,6 +13,7 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [currentTrick, setCurrentTrick] = useState('');
   const [playerPosition, setPlayerPosition] = useState(1); // 0: left, 1: center, 2: right
   const [isGameOver, setIsGameOver] = useState(false);
+  const [trickMessages, setTrickMessages] = useState([]);
 
   useEffect(() => {
     let interval;
@@ -80,31 +82,32 @@ const SurfingMiniGame = ({ birdImage }) => {
 
   const spawnObstacle = () => {
     if (progress < 100) {
-      const newObstacle = {
-        id: Date.now(),
+      const newObstacles = Array.from({ length: 5 }, () => ({
+        id: Date.now() + Math.random(),
         position: Math.floor(Math.random() * 3), // 0, 1, 2 for tracks
-        size: 20, // Initial size
-      };
-      setObstacles((prev) => [...prev, newObstacle]);
+        size: 20,
+        bottom: window.innerHeight, // Start from the top
+      }));
+      setObstacles((prev) => [...prev, ...newObstacles]);
     }
   };
 
   const spawnCoin = () => {
     if (progress < 100) {
-      const newCoin = {
+      const newCoins = Array.from({ length: 5 }, () => ({
         id: Date.now() + Math.random(),
         position: Math.floor(Math.random() * 3), // 0, 1, 2 for tracks
-        size: 15, // Initial size
-      };
-      setCoins((prev) => [...prev, newCoin]);
+        size: 15,
+        bottom: window.innerHeight, // Start from the top
+      }));
+      setCoins((prev) => [...prev, ...newCoins]);
     }
   };
 
   const handleTrickInput = (event) => {
     const key = event.key;
     const trickSequence = ['a', 'w', 'd', 's'];
-    
-    // Check for trick opportunity input
+
     if (trickOpportunity) {
       if (trickSequence[trickAttempts] === key) {
         setTrickAttempts((prev) => prev + 1);
@@ -114,14 +117,14 @@ const SurfingMiniGame = ({ birdImage }) => {
       if (trickAttempts === 3) {
         setTrickOpportunity(false); // Reset trick opportunity
         setTrickAttempts(0); // Reset attempts for the next trick opportunity
-        alert("Trick opportunity finished! Keep surfing!");
+        setTrickMessages(prev => [...prev, "Trick opportunity finished! Keep surfing!"]);
       }
     }
   };
 
   const showTrickMessage = (attempt) => {
     const messages = ["Cool flip!", "Woah!!", "Kowabunga!", "RADICAL!!", "NO WAY!!! 0o0"];
-    alert(messages[attempt % messages.length]);
+    setTrickMessages(prev => [...prev, messages[attempt % messages.length]]);
   };
 
   const handlePlayerMovement = (event) => {
@@ -131,6 +134,27 @@ const SurfingMiniGame = ({ birdImage }) => {
       setPlayerPosition((prev) => prev + 1); // Move right
     }
   };
+
+  useEffect(() => {
+    const moveElements = () => {
+      setObstacles((prev) =>
+        prev.map((obstacle) => ({
+          ...obstacle,
+          bottom: obstacle.bottom - 2 // Move down
+        })).filter(obstacle => obstacle.bottom > -50) // Remove off-screen obstacles
+      );
+
+      setCoins((prev) =>
+        prev.map((coin) => ({
+          ...coin,
+          bottom: coin.bottom - 2 // Move down
+        })).filter(coin => coin.bottom > -50) // Remove off-screen coins
+      );
+    };
+
+    const moveInterval = setInterval(moveElements, 100);
+    return () => clearInterval(moveInterval);
+  }, [obstacles, coins]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleTrickInput);
@@ -149,24 +173,27 @@ const SurfingMiniGame = ({ birdImage }) => {
           <button onClick={handleStartGame}>Start Game</button>
         </div>
       ) : (
-        <div>
+        <div className="game-area">
           <div className="progress-bar">
             <div className="progress" style={{ width: `${progress}%` }} />
-            <img src={birdImage} alt="Surfboard" className="surfboard-icon" />
           </div>
           <h3>Score: {score}</h3>
-          {trickOpportunity && <div className="trick-popup">{currentTrick}</div>}
+          {/* Render trick messages */}
+          {trickMessages.map((message, index) => (
+            <div key={index} className="trick-popup" style={{ top: `${Math.random() * 80 + 10}px`, left: `${Math.random() * 90}%` }}>
+              {message}
+            </div>
+          ))}
           {/* Render obstacles */}
           {obstacles.map((obstacle) => (
             <div
               key={obstacle.id}
-              className="obstacle"
+              className={`obstacle track-${obstacle.position}`}
               style={{
-                left: `${obstacle.position * 33}%`, // 3 tracks, 33% each
                 width: `${obstacle.size}px`,
                 height: `${obstacle.size}px`,
-                animation: 'moveDown 2s linear',
-                transform: 'scale(' + (1 + (100 - progress) / 100) + ')', // Grow as it descends
+                bottom: `${obstacle.bottom}px`,
+                transform: 'scale(' + (1 + (100 - progress) / 100) + ')',
               }}
             />
           ))}
@@ -174,18 +201,19 @@ const SurfingMiniGame = ({ birdImage }) => {
           {coins.map((coin) => (
             <div
               key={coin.id}
-              className="coin"
+              className={`coin track-${coin.position}`}
               style={{
-                left: `${coin.position * 33}%`, // 3 tracks, 33% each
                 width: `${coin.size}px`,
                 height: `${coin.size}px`,
-                animation: 'moveDown 2s linear',
-                transform: 'scale(' + (1 + (100 - progress) / 100) + ')', // Grow as it descends
+                bottom: `${coin.bottom}px`,
+                transform: 'scale(' + (1 + (100 - progress) / 100) + ')',
               }}
             />
           ))}
           {/* Player representation */}
-          <div className={`player track-${playerPosition}`}></div>
+          <div className={`player track-${playerPosition}`}>
+            <div>{BirdImage}</div>
+          </div>
         </div>
       )}
       {isGameOver && (

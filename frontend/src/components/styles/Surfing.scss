@@ -1,62 +1,85 @@
 .surfing-game {
-    position: relative;
-    text-align: center;
-    overflow: hidden; // Prevent overflow of elements
-  }
-  
-  .start-menu {
-    margin: 20px;
-  }
-  
-  .progress-bar {
-    position: relative;
-    width: 100%;
-    height: 30px;
-    background: #ccc;
-    overflow: hidden;
-  }
-  
-  .progress {
-    height: 100%;
-    background: #4caf50;
-    transition: width 0.3s;
-  }
-  
-  .surfboard-icon {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px; // Adjust size as needed
-  }
-  
-  .trick-popup {
-    position: absolute;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(255, 255, 255, 0.8);
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .obstacle {
-    position: absolute;
-    bottom: 100%; // Start above the screen
-    background: red; // Placeholder color for obstacles
-  }
-  
-  .coin {
-    position: absolute;
-    bottom: 100%; // Start above the screen
-    background: gold; // Placeholder color for coins
-  }
-  
-  .player {
-    position: absolute;
-    bottom: 10px; // Position above the bottom
-    width: 50px;
-    height: 50px;
-    background: blue; // Placeholder color for player
-  }
-  
+  position: relative;
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.start-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background-color: lightgray;
+}
+
+.progress {
+  height: 100%;
+  background-color: green;
+  transition: width 0.3s ease-in-out;
+}
+
+.surfboard-icon {
+  position: absolute;
+  bottom: 10px;
+  left: calc(50% - 25px);
+  width: 50px;
+}
+
+.game-area {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+}
+
+.obstacle, .coin {
+  position: absolute;
+  bottom: 0; /* Start from the top of the screen */
+}
+
+.coin {
+  background: gold;
+}
+
+.obstacle {
+  background: red;
+}
+
+.player {
+  position: absolute;
+  bottom: 50px;
+  width: 30px;
+  height: 50px;
+  background: blue;
+}
+
+.track-0 {
+  left: 10%; /* Left track */
+}
+
+.track-1 {
+  left: 50%; /* Center track */
+}
+
+.track-2 {
+  left: 80%; /* Right track */
+}
+
+.trick-popup {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

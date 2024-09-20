@@ -1,6 +1,7 @@
 // src/context/AuthContext.js
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios'; // Using axios for consistent API calls
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -10,7 +11,7 @@ const AuthProvider = ({ children }) => {
     loading: true,  // Keep track of loading state
     user: null, 
   });
-
+  const navigate = useNavigate(); 
   // Fetch user data from the server using the JWT token
   const fetchUser = async () => {
     try {
@@ -85,9 +86,10 @@ const AuthProvider = ({ children }) => {
         birdColor,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         // Automatically log the user in after a successful registration
         await login(username, password);
+        navigate('/');
       } else {
         console.error('Registration failed:', response.data.message);
       }

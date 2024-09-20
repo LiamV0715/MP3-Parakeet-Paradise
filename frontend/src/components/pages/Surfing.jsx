@@ -14,13 +14,14 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [playerPosition, setPlayerPosition] = useState(1); // 0: left, 1: center, 2: right
   const [isGameOver, setIsGameOver] = useState(false);
   const [trickMessages, setTrickMessages] = useState([]);
+  const [targetPosition, setTargetPosition] = useState(1); // Target position for smooth movement
 
   useEffect(() => {
     let interval;
     if (gameStarted && progress < 100) {
       interval = setInterval(() => {
         setProgress((prev) => Math.min(prev + 0.1, 100));
-      }, 300); // Fills in 60 seconds
+      }, 300);
     }
     return () => clearInterval(interval);
   }, [gameStarted, progress]);
@@ -67,7 +68,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setTrickOpportunity(false);
     setTrickAttempts(0);
     setCurrentTrick('');
-    setPlayerPosition(1); // Reset player position to center
+    setTargetPosition(1); // Reset target position to center
     setIsGameOver(false);
   };
 
@@ -76,18 +77,18 @@ const SurfingMiniGame = ({ birdImage }) => {
   };
 
   const initializeGameElements = () => {
-    setObstacles([]); // Clear any existing obstacles
-    setCoins([]);     // Clear any existing coins
+    setObstacles([]);
+    setCoins([]);
   };
 
   const spawnObstacle = () => {
     if (progress < 100) {
-      const position = Math.floor(Math.random() * 3); // Random track
+      const position = Math.floor(Math.random() * 3);
       const newObstacle = {
         id: Date.now() + Math.random(),
         position: position,
         size: 20,
-        bottom: window.innerHeight, // Start from the top
+        bottom: window.innerHeight,
       };
       setObstacles((prev) => [...prev, newObstacle]);
     }
@@ -95,12 +96,12 @@ const SurfingMiniGame = ({ birdImage }) => {
 
   const spawnCoin = () => {
     if (progress < 100) {
-      const position = Math.floor(Math.random() * 3); // Random track
+      const position = Math.floor(Math.random() * 3);
       const newCoin = {
         id: Date.now() + Math.random(),
         position: position,
         size: 15,
-        bottom: window.innerHeight, // Start from the top
+        bottom: window.innerHeight,
       };
       setCoins((prev) => [...prev, newCoin]);
     }
@@ -117,23 +118,18 @@ const SurfingMiniGame = ({ birdImage }) => {
         showTrickMessage(trickAttempts);
       }
       if (trickAttempts === 3) {
-        setTrickOpportunity(false); // Reset trick opportunity
-        setTrickAttempts(0); // Reset attempts for the next trick opportunity
+        setTrickOpportunity(false);
+        setTrickAttempts(0);
         setTrickMessages((prev) => [...prev, "Trick opportunity finished! Keep surfing!"]);
       }
     }
   };
 
-  const showTrickMessage = (attempt) => {
-    const messages = ["Cool flip!", "Woah!!", "Kowabunga!", "RADICAL!!", "NO WAY!!! 0o0"];
-    setTrickMessages((prev) => [...prev, messages[attempt % messages.length]]);
-  };
-
   const handlePlayerMovement = (event) => {
-    if (event.key === 'a' && playerPosition > 0) {
-      setPlayerPosition((prev) => prev - 1); // Move left
-    } else if (event.key === 'd' && playerPosition < 2) {
-      setPlayerPosition((prev) => prev + 1); // Move right
+    if (event.key === 'a' && targetPosition > 0) {
+      setTargetPosition((prev) => prev - 1); // Move left
+    } else if (event.key === 'd' && targetPosition < 2) {
+      setTargetPosition((prev) => prev + 1); // Move right
     }
   };
 
@@ -142,13 +138,13 @@ const SurfingMiniGame = ({ birdImage }) => {
       setObstacles((prev) =>
         prev.map((obstacle) => ({
           ...obstacle,
-          bottom: obstacle.bottom - 2 // Move down
+          bottom: obstacle.bottom - 2
         }))
         .filter(obstacle => {
-          if (obstacle.bottom < -50) return false; // Remove off-screen obstacles
+          if (obstacle.bottom < -50) return false;
           if (isCollision(obstacle)) {
-            setScore((prev) => prev - 5); // Penalty for hitting obstacle
-            return false; // Remove obstacle on collision
+            setScore((prev) => prev - 5);
+            return false;
           }
           return true;
         })
@@ -157,13 +153,13 @@ const SurfingMiniGame = ({ birdImage }) => {
       setCoins((prev) =>
         prev.map((coin) => ({
           ...coin,
-          bottom: coin.bottom - 2 // Move down
+          bottom: coin.bottom - 2
         }))
         .filter(coin => {
-          if (coin.bottom < -50) return false; // Remove off-screen coins
+          if (coin.bottom < -50) return false;
           if (isCollision(coin)) {
-            setScore((prev) => prev + 5); // Reward for collecting coin
-            return false; // Remove coin on collection
+            setScore((prev) => prev + 5);
+            return false;
           }
           return true;
         })
@@ -172,18 +168,33 @@ const SurfingMiniGame = ({ birdImage }) => {
 
     const moveInterval = setInterval(moveElements, 100);
     return () => clearInterval(moveInterval);
-  }, [obstacles, coins, playerPosition]);
+  }, [obstacles, coins]);
+
+  useEffect(() => {
+    const animateMovement = () => {
+      if (playerPosition !== targetPosition) {
+        setPlayerPosition((prev) => {
+          const step = prev < targetPosition ? 0.1 : -0.1;
+          const newPos = prev + step;
+          return Math.abs(newPos - targetPosition) < 0.1 ? targetPosition : newPos;
+        });
+      }
+    };
+
+    const movementInterval = setInterval(animateMovement, 20);
+    return () => clearInterval(movementInterval);
+  }, [targetPosition, playerPosition]);
 
   const isCollision = (element) => {
     const playerElement = {
-      left: playerPosition * (window.innerWidth / 3), // Centered position
-      right: playerPosition * (window.innerWidth / 3) + 50, // Fixed width of player
-      bottom: 50, // Fixed bottom position of player
+      left: playerPosition * (window.innerWidth / 3),
+      right: playerPosition * (window.innerWidth / 3) + 50,
+      bottom: 50,
     };
     
     const elementPosition = {
-      left: element.position * (window.innerWidth / 3), // Centered position of element
-      right: element.position * (window.innerWidth / 3) + element.size, // Width of element
+      left: element.position * (window.innerWidth / 3),
+      right: element.position * (window.innerWidth / 3) + element.size,
       bottom: element.bottom,
     };
 
@@ -201,7 +212,7 @@ const SurfingMiniGame = ({ birdImage }) => {
       window.removeEventListener('keydown', handleTrickInput);
       window.removeEventListener('keydown', handlePlayerMovement);
     };
-  }, [trickOpportunity, playerPosition]);
+  }, [trickOpportunity]);
 
   return (
     <div className="surfing-game">
@@ -216,13 +227,11 @@ const SurfingMiniGame = ({ birdImage }) => {
             <div className="progress" style={{ width: `${progress}%` }} />
           </div>
           <h3>Score: {score}</h3>
-          {/* Render trick messages */}
           {trickMessages.map((message, index) => (
             <div key={index} className="trick-popup" style={{ top: `${Math.random() * 80 + 10}px`, left: `${Math.random() * 90}%` }}>
               {message}
             </div>
           ))}
-          {/* Render obstacles */}
           {obstacles.map((obstacle) => (
             <div
               key={obstacle.id}
@@ -231,11 +240,10 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${obstacle.size}px`,
                 height: `${obstacle.size}px`,
                 bottom: `${obstacle.bottom}px`,
-                left: `${obstacle.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (obstacle.size / 2)}px`, // Centered position
+                left: `${obstacle.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (obstacle.size / 2)}px`,
               }}
             />
           ))}
-          {/* Render coins */}
           {coins.map((coin) => (
             <div
               key={coin.id}
@@ -244,7 +252,7 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${coin.size}px`,
                 height: `${coin.size}px`,
                 bottom: `${coin.bottom}px`,
-                left: `${coin.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (coin.size / 2)}px`, // Centered position
+                left: `${coin.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (coin.size / 2)}px`,
               }}
             />
           ))}
@@ -257,20 +265,20 @@ const SurfingMiniGame = ({ birdImage }) => {
               left: `${playerPosition * (window.innerWidth / 3) + (window.innerWidth / 6) - 25}px`, // Centered position
               width: '50px',
               height: '50px',
+              zIndex: 0, // Ensure player is behind the bird
             }}
-          >
-            <BirdImage
-              style={{
-                maxWidth: '50px',
-                maxHeight: '50px',
-                position: 'absolute',
-                bottom: 0,
-                left: 0,
-                zIndex: 1,
-              }}
-              birdImage={birdImage}
-            />
-          </div>
+          />
+          <BirdImage
+            style={{
+              maxWidth: '50px',
+              maxHeight: '50px',
+              position: 'absolute',
+              bottom: '50px', // Align with player
+              left: `${playerPosition * (window.innerWidth / 3) + (window.innerWidth / 6) - 25}px`, // Match player position
+              zIndex: 1,
+            }}
+            birdImage={birdImage}
+          />
         </div>
       )}
     </div>

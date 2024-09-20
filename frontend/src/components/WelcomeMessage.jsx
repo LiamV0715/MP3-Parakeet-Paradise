@@ -1,23 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const WelcomeMessage = () => {
   const { authState } = useContext(AuthContext);
+  const [message, setMessage] = useState("Please log in for all features");
   
-  // Debug
-  console.log('Auth State:', authState);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (authState.isAuthenticated && authState.user) {
+        setMessage(`Have fun in paradise, ${authState.user.username}!`);
+      } else {
+        setMessage("Please log in for all features");
+      }
+    }, 1000); // Wait for 2 seconds before checking
 
-  if (authState.loading) {
-    return <div>Loading...</div>; // Show loading while fetching user
-  }
-
-  if (!authState.isAuthenticated || !authState.user) {
-    return <div>Please log in for all features</div>;
-  }
+    return () => clearTimeout(timer); // Cleanup timer on unmount
+  }, [authState]);
 
   return (
     <div className="welcome-message">
-      Have fun in paradise, {authState.user.username}!
+      {message}
     </div>
   );
 };

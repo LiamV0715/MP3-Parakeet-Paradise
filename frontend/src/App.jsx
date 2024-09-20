@@ -26,6 +26,7 @@ const App = () => {
       <Route path="/surfing" element={<Surfing />} />
       <Route path="/fishing" element={<Fishing />} />
       <Route path="/scoreboard" element={<Scoreboard />} />
+    
     </Routes>
   );
 };

@@ -84,12 +84,12 @@ function Fishing({ setPage }) {
       <WelcomeMessage />
       {gameStatus === "waiting" && <button onClick={startGame}>Start Game</button>}
       {gameStatus === "started" && showReelButton && (
-        <button onClick={handleReelClick} className="reel-button">REEL IT!</button>
+        <button id="fish-button"onClick={handleReelClick} className="reel-button">REEL IT!</button>
       )}
       {gameStatus === "won" && (
         <div>
           <h1>You caught a {fishWeight} lb fish!</h1>
-          <button onClick={() => setPage("menu")}>Main Menu</button>
+          <button onClick={useNavigate('/')}>Main Menu</button>
         </div>
       )}
       {gameStatus === "lost" && (

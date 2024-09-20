@@ -176,14 +176,14 @@ const SurfingMiniGame = ({ birdImage }) => {
 
   const isCollision = (element) => {
     const playerElement = {
-      left: playerPosition * (window.innerWidth / 3) + 10, // Calculate left position of player
-      right: playerPosition * (window.innerWidth / 3) + 40, // Calculate right position of player
+      left: playerPosition * (window.innerWidth / 3), // Centered position
+      right: playerPosition * (window.innerWidth / 3) + 50, // Fixed width of player
       bottom: 50, // Fixed bottom position of player
     };
     
     const elementPosition = {
-      left: element.position * (window.innerWidth / 3) + 10, // Calculate left position of element
-      right: element.position * (window.innerWidth / 3) + 40, // Calculate right position of element
+      left: element.position * (window.innerWidth / 3), // Centered position of element
+      right: element.position * (window.innerWidth / 3) + element.size, // Width of element
       bottom: element.bottom,
     };
 
@@ -231,8 +231,7 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${obstacle.size}px`,
                 height: `${obstacle.size}px`,
                 bottom: `${obstacle.bottom}px`,
-                transform: 'scale(' + (1 + (100 - progress) / 100) + ')',
-                left: `${obstacle.position * (window.innerWidth / 3)}px`, // Align with track
+                left: `${obstacle.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (obstacle.size / 2)}px`, // Centered position
               }}
             />
           ))}
@@ -245,17 +244,17 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${coin.size}px`,
                 height: `${coin.size}px`,
                 bottom: `${coin.bottom}px`,
-                left: `${coin.position * (window.innerWidth / 3)}px`, // Align with track
+                left: `${coin.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (coin.size / 2)}px`, // Centered position
               }}
             />
           ))}
-          {/* Player */}
+          {/* Render player */}
           <div
             className="player"
             style={{
               position: 'absolute',
-              bottom: '50px', // Adjust this for your desired height
-              left: `${playerPosition * (window.innerWidth / 3)}px`, // Align with track
+              bottom: '50px', // Adjust for your desired height
+              left: `${playerPosition * (window.innerWidth / 3) + (window.innerWidth / 6) - 25}px`, // Centered position
               width: '50px',
               height: '50px',
             }}

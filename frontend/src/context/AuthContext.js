@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
           setAuthState({
             isAuthenticated: true,
             loading: false,
-            user: response.data,  // Response from Passport should include the user data
+            user: { ...response.data, token },  // Response from Passport should include the user data
           });
         } else {
           // If token is invalid, clear auth state and token
@@ -61,7 +61,7 @@ const AuthProvider = ({ children }) => {
         localStorage.setItem('token', token);   // Store token in localStorage
 
         // Update authState with user data
-        setAuthState({ isAuthenticated: true, loading: false, user });
+        setAuthState({ isAuthenticated: true, loading: false, user: { ...user, token } }); // Include token in user object
       } else {
         console.error('Login failed:', response.data.message);
       }
@@ -93,9 +93,34 @@ const AuthProvider = ({ children }) => {
       console.error('Registration failed', error);
     }
   };
+  // Function to submit fish score
+  const submitFishingScore = async (weight) => {
+    const token = authState.user ? authState.user.token : null; // Get the token from authState
+    if (!token) {
+      console.error("No token found, unable to submit fishing score.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/api/fish-score",
+        { fishWeight: weight },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log("Fishing score submitted:", response.data);
+    } catch (error) {
+      console.error("Error submitting fishing score:", error);
+    }
+  };
+  
 
   return (
-    <AuthContext.Provider value={{ authState, setAuthState, login, logout, signup }}>
+    <AuthContext.Provider value={{ authState, submitFishingScore, setAuthState, login, logout, signup }}>
       {children}
     </AuthContext.Provider>
   );

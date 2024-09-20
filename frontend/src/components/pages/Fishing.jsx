@@ -2,14 +2,24 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import WelcomeMessage from '../WelcomeMessage';
 import '../styles/Fishing.scss';
+import fish1 from '../../assets/images/smallestFish.png';
+import fish2 from '../../assets/images/smallerFish.png';
+import fish3 from '../../assets/images/smallFish.png';
+import fish4 from '../../assets/images/mediumFish.png';
+import fish5 from '../../assets/images/bigFish.png';
+import fish6 from '../../assets/images/biggerFish.png';
+import fish7 from '../../assets/images/biggestFish.png';
+import fishLost from '../../assets/images/lostFish.png';
+import { AuthContext } from '../../context/AuthContext';
 
 function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
   const [fishWeight, setFishWeight] = useState(0);
   const [showReelButton, setShowReelButton] = useState(false);
   const [timer, setTimer] = useState(null);
-  const [isCatching, setIsCatching] = useState(false); // New flag
+  const [isCatching, setIsCatching] = useState(false);
   const navigate = useNavigate();
+  const { submitFishingScore, authState } = useContext(AuthContext);
 
   const handleBackToMenu = () => {
     navigate('/');  // Navigates to the main menu page
@@ -17,11 +27,11 @@ function Fishing({ setPage }) {
 
   const startGame = () => {
     if (timer) {
-      clearTimeout(timer); // Clear the previous timer when restarting the game
+      clearTimeout(timer);
     }
     setGameStatus("started");
-    setShowReelButton(false); // Reset reel button visibility
-    setIsCatching(false); // Reset catching status
+    setShowReelButton(false);
+    setIsCatching(false);
     const delay = Math.floor(Math.random() * 10000);
     const newTimer = setTimeout(() => setShowReelButton(true), delay);
     setTimer(newTimer);
@@ -29,42 +39,38 @@ function Fishing({ setPage }) {
 
   const generateFishWeight = () => {
     let sum = 0;
-    const rolls = 6;  // Number of dice rolls for bell curve logic
+    const rolls = 6; 
     for (let i = 0; i < rolls; i++) {
       sum += Math.random();
     }
-    return Math.floor((sum / rolls) * 50) + 1; // Normalize to 1-50
+    return Math.floor((sum / rolls) * 50) + 1;
+  };
+
+  const getFishImage = (weight) => {
+    const intervals = 50 / 7;
+    if (weight <= intervals) return fish1;
+    if (weight <= intervals * 2) return fish2;
+    if (weight <= intervals * 3) return fish3;
+    if (weight <= intervals * 4) return fish4;
+    if (weight <= intervals * 5) return fish5;
+    if (weight <= intervals * 6) return fish6;
+    return fish7;
   };
 
   const handleReelClick = async () => {
     if (gameStatus === "started") {
       const weight = generateFishWeight();
       setFishWeight(weight);
-      setIsCatching(true); // Set catching status to true
+      setIsCatching(true);
       setGameStatus("won");
 
-      // Submit score
-      await submitScore(weight);
-    }
-  };
+      const token = authState.user ? authState.user.token : null; // Retrieve token from authState
+      if (!token) {
+        console.error("No token found, unable to submit fishing score.");
+        return;
+      }
 
-  const submitScore = async (weight) => {
-    try {
-      const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:5001/api/fish-score", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          fishWeight: weight,
-        }),
-      });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error submitting score:", error);
+      await submitFishingScore(weight); // You can just pass weight since token is in the function
     }
   };
 
@@ -74,8 +80,8 @@ function Fishing({ setPage }) {
         if (gameStatus === "started" && !isCatching) {
           setGameStatus("lost");
         }
-      }, 400); // 1/2 second to click
-      return () => clearTimeout(lostTimer); // Cleanup timer on unmount
+      }, 400);
+      return () => clearTimeout(lostTimer);
     }
   }, [showReelButton, gameStatus, isCatching]);
 
@@ -84,17 +90,19 @@ function Fishing({ setPage }) {
       <WelcomeMessage />
       {gameStatus === "waiting" && <button onClick={startGame}>Start Game</button>}
       {gameStatus === "started" && showReelButton && (
-        <button id="fish-button"onClick={handleReelClick} className="reel-button">REEL IT!</button>
+        <button id="fish-button" onClick={handleReelClick} className="reel-button">REEL IT!</button>
       )}
       {gameStatus === "won" && (
         <div>
           <h1>You caught a {fishWeight} lb fish!</h1>
-          <button onClick={useNavigate('/')}>Main Menu</button>
+          <img src={getFishImage(fishWeight)} alt="Caught fish" className="fish-image" />
+          <button onClick={() => setPage("menu")}>Main Menu</button>
         </div>
       )}
       {gameStatus === "lost" && (
         <div>
           <h1>Fish lost!</h1>
+          <img src={fishLost} alt="Fish lost" className="fish-image" />
           <button onClick={startGame}>Retry</button>
           <button onClick={handleBackToMenu}>Main Menu</button>
         </div>

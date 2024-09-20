@@ -6,7 +6,7 @@ const userRoutes = require("./routes/userRoutes");
 const authRoutes = require('./routes/authRoutes'); 
 const passport = require('passport');
 require('./config/passport')(passport);
-const fishingScoreRoutes = require("./routes/fishingScoreRoutes");
+const fishingScoreRoutes = require("./routes/fishScoreRoutes");
 const surfingScoreRoutes = require("./routes/surfingScoreRoutes");
 const bcrypt = require('bcryptjs'); 
 
@@ -28,7 +28,7 @@ app.use(passport.initialize());
 // Routes
 app.use("/api/auth", authRoutes); // Handles authentication routes
 app.use("/users", userRoutes); // Handles user-related routes
-app.use("/scores/fishing", fishingScoreRoutes); // Handles fishing score routes
+app.use("/api/fish-score", fishingScoreRoutes); // Handles fishing score routes
 app.use("/scores/surfing", surfingScoreRoutes); // Handles surfing score routes
 
 

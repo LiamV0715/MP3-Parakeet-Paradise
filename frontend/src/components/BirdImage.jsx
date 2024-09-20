@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import blueBird from '../assets/images/blueBird.png';  // Adjust the path based on where you store the images
+import blueBird from '../assets/images/blueBird.png';  
 import pinkBird from '../assets/images/pinkBird.png';
 import greenBird from '../assets/images/greenBird.png';
 import yellowBird from '../assets/images/yellowBird.png';
@@ -15,9 +15,9 @@ const BirdImage = () => {
   const getBirdImage = (color) => {
     switch (color) {
       case 'blue':
-        return pinkBird;
+        return blueBird;
       case 'pink':
-        return redBird;
+        return pinkBird;
       case 'green':
         return greenBird;
       case 'yellow':

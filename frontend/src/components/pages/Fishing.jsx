@@ -73,7 +73,7 @@ function Fishing({ setPage }) {
         if (gameStatus === "started") {
           setGameStatus("lost");
         }
-      }, 250); // 1/4 second to click
+      }, 400); // 1/4 second to click
     }
   }, [showReelButton, gameStatus]);
 

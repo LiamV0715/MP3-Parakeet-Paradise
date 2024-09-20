@@ -72,12 +72,14 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//find a user and keep their session authenticated
+// Find a user and keep their session authenticated
 router.get('/me', passport.authenticate('jwt', { session: false }), async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
-    console.log(req.user)
-    res.jsonres.json({
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({
       username: user.username,
       birdColor: user.birdColor,
     });

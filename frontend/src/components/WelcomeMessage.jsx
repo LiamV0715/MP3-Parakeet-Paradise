@@ -1,9 +1,11 @@
-// src/components/WelcomeMessage.jsx
 import React, { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const WelcomeMessage = () => {
   const { authState } = useContext(AuthContext);
+  
+  // Debug
+  console.log('Auth State:', authState);
 
   if (authState.loading) {
     return <div>Loading...</div>; // Show loading while fetching user

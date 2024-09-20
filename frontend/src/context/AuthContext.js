@@ -19,6 +19,7 @@ const AuthProvider = ({ children }) => {
         const response = await axios.get('http://localhost:5001/api/auth/me', {
           headers: {
             'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
           },
         });
 

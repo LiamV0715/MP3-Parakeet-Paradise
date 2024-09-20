@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import '../styles/Menu.scss';
 import WelcomeMessage from '../WelcomeMessage';
-import BirdImage from '../BirdImage'; 
+import BirdImage from '../BirdImage';
+import { AuthContext } from '../../context/AuthContext'; // Import AuthContext
 
-
-const MainMenu = ({ user, setUser }) => {
-  const [showModal, setShowModal] = useState(!user); // Show modal if user is not logged in
+const MainMenu = () => {
+  const { authState, setAuthState } = useContext(AuthContext); // Access authState from AuthContext
+  const [showModal, setShowModal] = useState(!authState.user); // Show modal if user is not logged in
 
   const handleLogout = () => {
-    setUser(null);
+    setAuthState({ isAuthenticated: false, user: null });
     localStorage.removeItem('token');
   };
 
   const handleGuestPlay = () => {
-    setUser({ username: 'Guest', birdColor: 'blue' }); // Guest user with default bird color
+    setAuthState({ isAuthenticated: true, user: { username: 'Guest', birdColor: 'blue' } });
     setShowModal(false);
   };
 
@@ -38,10 +39,11 @@ const MainMenu = ({ user, setUser }) => {
       <button className="menu-button" onClick={() => window.location.href = '/fishing'}>Go Fishing!</button>
       <button className="menu-button" onClick={() => window.location.href = '/scoreboards'}>Scoreboards</button>
 
-      <button className="menu-button" onClick={user ? handleLogout : () => window.location.href = '/login'}>
-        {user ? 'Log Out' : 'Log In'}
+      <button className="menu-button" onClick={authState.user ? handleLogout : () => window.location.href = '/login'}>
+        {authState.user ? 'Log Out' : 'Log In'}
       </button>
-      <BirdImage /> 
+      
+      <BirdImage />
     </div>
   );
 };

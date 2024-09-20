@@ -15,34 +15,8 @@ const createUser = async (req, res) => {
   }
 };
 
-// Saving a new surf score
-const saveSurfScore = async (req, res) => {
-  const { userId, score } = req.body;
-  
-  try {
-    const surfScore = new SurfScore({ user: userId, score });
-    await surfScore.save();
-    res.status(201).json({ message: 'Surf score saved successfully', surfScore });
-  } catch (error) {
-    res.status(500).json({ message: 'Error saving surf score', error });
-  }
-};
 
-// Saving a new fish score
-const saveFishScore = async (req, res) => {
-  const { userId, fishWeight } = req.body;
-  
-  try {
-    const fishScore = new FishScore({ user: userId, fish_weight: fishWeight });
-    await fishScore.save();
-    res.status(201).json({ message: 'Fish score saved successfully', fishScore });
-  } catch (error) {
-    res.status(500).json({ message: 'Error saving fish score', error });
-  }
-};
 
 module.exports = {
   createUser,
-  saveSurfScore,
-  saveFishScore
 };

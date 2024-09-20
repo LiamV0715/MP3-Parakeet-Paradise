@@ -27,7 +27,7 @@ app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", authRoutes); // Handles authentication routes
-app.use("/users", userRoutes); // Handles user-related routes
+// app.use("/users", userRoutes); // Handles user-related routes (currently not favored method)
 app.use("/api/fish-score", fishingScoreRoutes); // Handles fishing score routes
 app.use("/scores/surfing", surfingScoreRoutes); // Handles surfing score routes
 

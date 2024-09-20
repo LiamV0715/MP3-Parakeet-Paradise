@@ -104,7 +104,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(
         "http://localhost:5001/api/fish-score",
-        { fishWeight: weight },
+        { fishWeight: Number(weight) },
         {
           headers: {
             'Authorization': `Bearer ${token}`,

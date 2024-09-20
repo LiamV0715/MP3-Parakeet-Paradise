@@ -18,7 +18,7 @@ router.get('/cumulative', async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server Error getting cumulative');
   }
 });
 
@@ -29,7 +29,7 @@ router.get('/biggestFish', async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server Error getting biggest fish');
   }
 });
 
@@ -40,7 +40,7 @@ router.get('/bestShred', async (req, res) => {
     res.json(users);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Server Error');
+    res.status(500).send('Server Error getting best shred');
   }
 });
 

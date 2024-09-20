@@ -70,7 +70,7 @@ function Fishing({ setPage }) {
         return;
       }
 
-      await submitFishingScore(weight); // You can just pass weight since token is in the function
+      await submitFishingScore(Number(weight)); // Convert to number if necessary, token is already in the function
     }
   };
 

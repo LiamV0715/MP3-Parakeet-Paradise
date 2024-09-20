@@ -1,10 +1,10 @@
-const express = require('express');
-const { createUser, saveSurfScore, saveFishScore } = require('../controllers/userController');
+// const express = require('express');
+// const { createUser, saveSurfScore, saveFishScore } = require('../controllers/userController');
 
-const router = express.Router();
+// const router = express.Router();
 
-router.post('/createUser', createUser);
-router.post('/saveSurfScore', saveSurfScore);
-router.post('/saveFishScore', saveFishScore);
+// router.post('/createUser', createUser);
+// router.post('/saveSurfScore', saveSurfScore);
+// router.post('/saveFishScore', saveFishScore);
 
-module.exports = router;
+// module.exports = router;

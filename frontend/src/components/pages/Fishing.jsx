@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from 'react-router-dom';
-import WelcomeMessage from '../WelcomeMessage';
-import '../styles/Fishing.scss';
-import fish1 from '../../assets/images/smallestFish.png';
-import fish2 from '../../assets/images/smallerFish.png';
-import fish3 from '../../assets/images/smallFish.png';
-import fish4 from '../../assets/images/mediumFish.png';
-import fish5 from '../../assets/images/bigFish.png';
-import fish6 from '../../assets/images/biggerFish.png';
-import fish7 from '../../assets/images/biggestFish.png';
-import fishLost from '../../assets/images/lostFish.png';
-import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from "react-router-dom";
+import WelcomeMessage from "../WelcomeMessage";
+import "../styles/Fishing.scss";
+import fish1 from "../../assets/images/smallestFish.png";
+import fish2 from "../../assets/images/smallerFish.png";
+import fish3 from "../../assets/images/smallFish.png";
+import fish4 from "../../assets/images/mediumFish.png";
+import fish5 from "../../assets/images/bigFish.png";
+import fish6 from "../../assets/images/biggerFish.png";
+import fish7 from "../../assets/images/biggestFish.png";
+import fishLost from "../../assets/images/lostFish.png";
+import { AuthContext } from "../../context/AuthContext";
+import fishBack from "../../assets/videos/fishBack.gif";
 
 function Fishing({ setPage }) {
   const [gameStatus, setGameStatus] = useState("waiting");
@@ -22,7 +23,7 @@ function Fishing({ setPage }) {
   const { submitFishingScore, authState } = useContext(AuthContext);
 
   const handleBackToMenu = () => {
-    navigate('/');  // Navigates to the main menu page
+    navigate("/"); // Navigates to the main menu page
   };
 
   const startGame = () => {
@@ -39,7 +40,7 @@ function Fishing({ setPage }) {
 
   const generateFishWeight = () => {
     let sum = 0;
-    const rolls = 6; 
+    const rolls = 6;
     for (let i = 0; i < rolls; i++) {
       sum += Math.random();
     }
@@ -87,26 +88,48 @@ function Fishing({ setPage }) {
 
   return (
     <div className="fishing-game">
-      <WelcomeMessage />
-      {gameStatus === "waiting" && <button onClick={startGame}>Start Game</button>}
-      {gameStatus === "started" && showReelButton && (
-        <button id="fish-button" onClick={handleReelClick} className="reel-button">REEL IT!</button>
-      )}
-      {gameStatus === "won" && (
-        <div>
-          <h1>You caught a {fishWeight} lb fish!</h1>
-          <img src={getFishImage(fishWeight)} alt="Caught fish" className="fish-image" />
-          <button onClick={handleBackToMenu}>Main Menu</button>
-        </div>
-      )}
-      {gameStatus === "lost" && (
-        <div>
-          <h1>Fish lost!</h1>
-          <img src={fishLost} alt="Fish lost" className="fish-image" />
-          <button onClick={startGame}>Retry</button>
-          <button onClick={handleBackToMenu}>Main Menu</button>
-        </div>
-      )}
+      <img
+        src={fishBack}
+        alt="Fish schooling visual"
+        className="fish-back"
+      />
+      <div className="zpop3">
+        <WelcomeMessage />
+        {gameStatus === "waiting" && (
+          <button onClick={startGame} className="fishing-start">Start Game</button>
+        )}
+        {gameStatus === "started" && showReelButton && (
+          <button
+            id="fish-button"
+            onClick={handleReelClick}
+            className="reel-button"
+          >
+            REEL IT!
+          </button>
+        )}
+        {gameStatus === "won" && (
+          <div>
+            <h1>You caught a {fishWeight} lb fish!</h1>
+            <img
+              src={getFishImage(fishWeight)}
+              alt="Caught fish"
+              className="fish-image"
+            />
+            <button onClick={handleBackToMenu}>Main Menu</button>
+          </div>
+        )}
+        {gameStatus === "lost" && (
+          <div className="zpop3">
+            <h1 className="fish-lost">Fish lost!</h1>
+            <img src={fishLost} alt="Fish lost" className="fish-lost-pic" />
+            <div className="fish-lost-buttons">
+            <button onClick={startGame}>Retry</button>
+            <button onClick={handleBackToMenu}>Main Menu</button>
+            </div>
+          </div>
+        )}
+      </div>
+      
     </div>
   );
 }

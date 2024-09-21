@@ -8,3 +8,75 @@
     padding: 4em;
     margin-top: 20%
 }
+
+.zpop3 {
+    z-index: 3;
+    position: relative;
+}
+
+
+.fish-back {
+    z-index: 0;
+    position: absolute;
+    width: 100%;
+    background-color: black;
+    object-fit: cover;
+}
+
+.fishing-start {
+    display: flex;
+    justify-content: center;
+    padding: 4em;
+    margin-top: 20%
+}
+
+.fish-instructions {
+    display: flex;
+    justify-content: center;
+    padding: 2em;
+    margin-top: 10%;
+    background-color: darkmagenta;
+    color: white;
+  -webkit-text-stroke: 1px hotpink;
+  font-size: 20px;
+  border-radius: 25px;
+  border: coral 4px solid;
+}
+
+.fish-lost {
+    display: flex;
+    justify-content: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 3em;
+    padding-bottom: 3em;
+    margin-top: 10%;
+    margin-left: 70%;
+    background-color: darkmagenta;
+    color: white;
+  -webkit-text-stroke: 1px hotpink;
+  font-size: 40px;
+  border-radius: 25px;
+  border: coral 4px solid;
+  position: absolute;
+}
+
+.fish-lost-pic {
+    max-height: 1000px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.fish-lost-buttons {
+    z-index: 4;
+    margin-left: 30%;
+    padding: 50px;
+
+}
+
+.fish-pic {
+    pointer-events: none;
+}

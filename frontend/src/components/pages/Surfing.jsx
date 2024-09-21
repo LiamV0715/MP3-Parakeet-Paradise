@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import '../styles/Surfing.scss';
-import BirdImage from "../BirdImage";
+import React, { useState, useEffect } from "react";
+import "../styles/Surfing.scss";
+import surfBird from "../../assets/images/surfBird.png";
+import coinPic from "../../assets/images/seratonin-coin.png";
+import obstaclePic from "../../assets/images/rock.png";
 
 const SurfingMiniGame = ({ birdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -10,7 +12,7 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [coins, setCoins] = useState([]);
   const [trickOpportunity, setTrickOpportunity] = useState(false);
   const [trickAttempts, setTrickAttempts] = useState(0);
-  const [currentTrick, setCurrentTrick] = useState('');
+  const [currentTrick, setCurrentTrick] = useState("");
   const [playerPosition, setPlayerPosition] = useState(1); // 0: left, 1: center, 2: right
   const [isGameOver, setIsGameOver] = useState(false);
   const [trickMessages, setTrickMessages] = useState([]);
@@ -51,7 +53,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setTrickOpportunity(true);
     setObstacles([]);
     setCoins([]);
-    setCurrentTrick('Press a, w, d, s in order!');
+    setCurrentTrick("Press a, w, d, s in order!");
   };
 
   const endGame = () => {
@@ -67,7 +69,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setCoins([]);
     setTrickOpportunity(false);
     setTrickAttempts(0);
-    setCurrentTrick('');
+    setCurrentTrick("");
     setTargetPosition(1); // Reset target position to center
     setIsGameOver(false);
   };
@@ -87,8 +89,9 @@ const SurfingMiniGame = ({ birdImage }) => {
       const newObstacle = {
         id: Date.now() + Math.random(),
         position: position,
-        size: 20,
+        size: 90,
         bottom: window.innerHeight,
+        image: obstaclePic,
       };
       setObstacles((prev) => [...prev, newObstacle]);
     }
@@ -100,7 +103,7 @@ const SurfingMiniGame = ({ birdImage }) => {
       const newCoin = {
         id: Date.now() + Math.random(),
         position: position,
-        size: 15,
+        size: 60,
         bottom: window.innerHeight,
       };
       setCoins((prev) => [...prev, newCoin]);
@@ -109,7 +112,7 @@ const SurfingMiniGame = ({ birdImage }) => {
 
   const handleTrickInput = (event) => {
     const key = event.key;
-    const trickSequence = ['a', 'w', 'd', 's'];
+    const trickSequence = ["a", "w", "d", "s"];
 
     if (trickOpportunity) {
       if (trickSequence[trickAttempts] === key) {
@@ -120,15 +123,18 @@ const SurfingMiniGame = ({ birdImage }) => {
       if (trickAttempts === 3) {
         setTrickOpportunity(false);
         setTrickAttempts(0);
-        setTrickMessages((prev) => [...prev, "Trick opportunity finished! Keep surfing!"]);
+        setTrickMessages((prev) => [
+          ...prev,
+          "Trick opportunity finished! Keep surfing!",
+        ]);
       }
     }
   };
 
   const handlePlayerMovement = (event) => {
-    if (event.key === 'a' && targetPosition > 0) {
+    if (event.key === "a" && targetPosition > 0) {
       setTargetPosition((prev) => prev - 1); // Move left
-    } else if (event.key === 'd' && targetPosition < 2) {
+    } else if (event.key === "d" && targetPosition < 2) {
       setTargetPosition((prev) => prev + 1); // Move right
     }
   };
@@ -136,33 +142,35 @@ const SurfingMiniGame = ({ birdImage }) => {
   useEffect(() => {
     const moveElements = () => {
       setObstacles((prev) =>
-        prev.map((obstacle) => ({
-          ...obstacle,
-          bottom: obstacle.bottom - 2
-        }))
-        .filter(obstacle => {
-          if (obstacle.bottom < -50) return false;
-          if (isCollision(obstacle)) {
-            setScore((prev) => prev - 5);
-            return false;
-          }
-          return true;
-        })
+        prev
+          .map((obstacle) => ({
+            ...obstacle,
+            bottom: obstacle.bottom - 2,
+          }))
+          .filter((obstacle) => {
+            if (obstacle.bottom < -50) return false;
+            if (isCollision(obstacle)) {
+              setScore((prev) => prev - 5);
+              return false;
+            }
+            return true;
+          })
       );
 
       setCoins((prev) =>
-        prev.map((coin) => ({
-          ...coin,
-          bottom: coin.bottom - 2
-        }))
-        .filter(coin => {
-          if (coin.bottom < -50) return false;
-          if (isCollision(coin)) {
-            setScore((prev) => prev + 5);
-            return false;
-          }
-          return true;
-        })
+        prev
+          .map((coin) => ({
+            ...coin,
+            bottom: coin.bottom - 2,
+          }))
+          .filter((coin) => {
+            if (coin.bottom < -50) return false;
+            if (isCollision(coin)) {
+              setScore((prev) => prev + 5);
+              return false;
+            }
+            return true;
+          })
       );
     };
 
@@ -176,7 +184,9 @@ const SurfingMiniGame = ({ birdImage }) => {
         setPlayerPosition((prev) => {
           const step = prev < targetPosition ? 0.1 : -0.1;
           const newPos = prev + step;
-          return Math.abs(newPos - targetPosition) < 0.1 ? targetPosition : newPos;
+          return Math.abs(newPos - targetPosition) < 0.1
+            ? targetPosition
+            : newPos;
         });
       }
     };
@@ -191,7 +201,7 @@ const SurfingMiniGame = ({ birdImage }) => {
       right: playerPosition * (window.innerWidth / 3) + 50,
       bottom: 50,
     };
-    
+
     const elementPosition = {
       left: element.position * (window.innerWidth / 3),
       right: element.position * (window.innerWidth / 3) + element.size,
@@ -206,11 +216,11 @@ const SurfingMiniGame = ({ birdImage }) => {
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleTrickInput);
-    window.addEventListener('keydown', handlePlayerMovement);
+    window.addEventListener("keydown", handleTrickInput);
+    window.addEventListener("keydown", handlePlayerMovement);
     return () => {
-      window.removeEventListener('keydown', handleTrickInput);
-      window.removeEventListener('keydown', handlePlayerMovement);
+      window.removeEventListener("keydown", handleTrickInput);
+      window.removeEventListener("keydown", handlePlayerMovement);
     };
   }, [trickOpportunity]);
 
@@ -228,7 +238,14 @@ const SurfingMiniGame = ({ birdImage }) => {
           </div>
           <h3>Score: {score}</h3>
           {trickMessages.map((message, index) => (
-            <div key={index} className="trick-popup" style={{ top: `${Math.random() * 80 + 10}px`, left: `${Math.random() * 90}%` }}>
+            <div
+              key={index}
+              className="trick-popup"
+              style={{
+                top: `${Math.random() * 80 + 10}px`,
+                left: `${Math.random() * 90}%`,
+              }}
+            >
               {message}
             </div>
           ))}
@@ -240,7 +257,15 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${obstacle.size}px`,
                 height: `${obstacle.size}px`,
                 bottom: `${obstacle.bottom}px`,
-                left: `${obstacle.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (obstacle.size / 2)}px`,
+                left: `${
+                  obstacle.position * (window.innerWidth / 3) +
+                  window.innerWidth / 6 -
+                  obstacle.size / 2
+                }px`,
+                backgroundImage: `url(${obstacle.image})`, // Use the obstacle image
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                position: "absolute",
               }}
             />
           ))}
@@ -252,33 +277,46 @@ const SurfingMiniGame = ({ birdImage }) => {
                 width: `${coin.size}px`,
                 height: `${coin.size}px`,
                 bottom: `${coin.bottom}px`,
-                left: `${coin.position * (window.innerWidth / 3) + (window.innerWidth / 6) - (coin.size / 2)}px`,
+                left: `${
+                  coin.position * (window.innerWidth / 3) +
+                  window.innerWidth / 6 -
+                  coin.size / 2
+                }px`,
+                backgroundImage: `url(${coinPic})`, // Add background image for the coin
+                backgroundSize: "contain", // Adjust size to fit the coin
+                backgroundRepeat: "no-repeat",
               }}
             />
           ))}
-          {/* Render player */}
+          {/* Render player with background image */}
           <div
-            className="player"
+            className="player-container"
             style={{
-              position: 'absolute',
-              bottom: '50px', // Adjust for your desired height
-              left: `${playerPosition * (window.innerWidth / 3) + (window.innerWidth / 6) - 25}px`, // Centered position
-              width: '50px',
-              height: '50px',
-              zIndex: 0, // Ensure player is behind the bird
+              position: "absolute",
+              bottom: "50px",
+              left: `${
+                playerPosition * (window.innerWidth / 3) +
+                window.innerWidth / 6 -
+                25
+              }px`,
+              width: "100px",
+              height: "100px",
             }}
-          />
-          <BirdImage
-            style={{
-              maxWidth: '50px',
-              maxHeight: '50px',
-              position: 'absolute',
-              bottom: '50px', // Align with player
-              left: `${playerPosition * (window.innerWidth / 3) + (window.innerWidth / 6) - 25}px`, // Match player position
-              zIndex: 1,
-            }}
-            birdImage={birdImage}
-          />
+          >
+            <div
+              className="player"
+              style={{
+                position: "absolute",
+                width: "150px",
+                height: "150px",
+
+                backgroundImage: `url(${surfBird})`, // Use the imported image variable
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                zIndex: 0,
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

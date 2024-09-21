@@ -18,20 +18,23 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [isGameOver, setIsGameOver] = useState(false);
   const [trickMessages, setTrickMessages] = useState([]);
   const [targetPosition, setTargetPosition] = useState(1);
+  const [trickImageRotation, setTrickImageRotation] = useState(0); // NEW state for image rotation
+  const [showTrickImage, setShowTrickImage] = useState(false); // NEW state to toggle trick image visibility
+
 
   // 1. Make the game shorter by increasing the progress increment
   useEffect(() => {
     let interval;
     if (gameStarted && progress < 100) {
       interval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 0.5, 100)); // Increase by 0.5 instead of 0.1
+        setProgress((prev) => Math.min(prev + 0.8, 100)); // Increase by 0.5 instead of 0.1
       }, 300); // Keep the interval the same, but we are progressing faster
     }
     return () => clearInterval(interval);
   }, [gameStarted, progress]);
 
   useEffect(() => {
-    if (progress >= 95 && !trickOpportunity) {
+    if (progress >= 85 && !trickOpportunity) {
       handleTrickOpportunity();
     }
     if (progress === 100) {
@@ -75,6 +78,8 @@ const SurfingMiniGame = ({ birdImage }) => {
     setCurrentTrick("");
     setTargetPosition(1); 
     setIsGameOver(false);
+    setTrickImageRotation(0); // Reset rotation
+    setShowTrickImage(false); // Hide the trick image
   };
 
   const handleStartGame = () => {
@@ -116,24 +121,37 @@ const SurfingMiniGame = ({ birdImage }) => {
 
   const handleTrickInput = (event) => {
     const key = event.key;
-    const trickSequence = ["a", "w", "d", "s"];
-
+    const trickSequence = ["a", "w", "s", "d"]; // Define the correct sequence
+  
     if (trickOpportunity) {
+      // Check if the current key matches the expected key in the sequence
       if (trickSequence[trickAttempts] === key) {
         setTrickAttempts((prev) => prev + 1);
-        setScore((prev) => prev + 20);
-        showTrickMessage(trickAttempts);
-      }
-      if (trickAttempts === 3) {
-        setTrickOpportunity(false);
+        setScore((prev) => prev + 20); // Award points with each correct key press
+        setTrickImageRotation((prev) => prev + 90); // Rotate the image
+  
+        // If the full sequence is completed
+        if (trickAttempts === 3) {
+          // Trigger the trick completed message and reset for the next trick
+          setTrickMessages((prev) => [
+            ...prev,
+            "Trick completed! Keep surfing!",
+          ]);
+          // Reset for the next round of trick input
+          setTrickAttempts(0);
+        }
+      } else {
+        // If a wrong key is pressed, reset the sequence
         setTrickAttempts(0);
+        setTrickImageRotation(0); // Reset the image rotation
         setTrickMessages((prev) => [
           ...prev,
-          "Trick opportunity finished! Keep surfing!",
+          "Wrong key! Start the trick again!",
         ]);
       }
     }
   };
+  
 
   const handlePlayerMovement = (event) => {
     if (event.key === "a" && targetPosition > 0) {
@@ -257,6 +275,29 @@ const SurfingMiniGame = ({ birdImage }) => {
               {message}
             </div>
           ))}
+          
+          {/* Trick Opportunity Visual */}
+          {trickOpportunity && (
+            <div className="trick-opportunity">
+              <h2 className="trick-text">TRICK TIME!!</h2>
+              <img
+                src={trickBird} 
+                alt="Trick Image"
+                className="trick-image"
+                style={{
+                  transform: `rotate(${trickAttempts * 90}deg)`, // Rotate image based on attempts
+                  transition: 'transform 0.5s',
+                  width: '150px', // Adjust size as needed
+                  height: '150px', // Adjust size as needed
+                  position: 'absolute',
+                  top: '20%', // Adjust position as needed
+                  left: '50%',
+                  transformOrigin: 'center',
+                }}
+              />
+            </div>
+          )}
+  
           {obstacles.map((obstacle) => (
             <div
               key={obstacle.id}
@@ -270,13 +311,14 @@ const SurfingMiniGame = ({ birdImage }) => {
                   window.innerWidth / 6 -
                   obstacle.size / 2
                 }px`,
-                backgroundImage: `url(${obstacle.image})`, // Use the obstacle image
+                backgroundImage: `url(${obstacle.image}`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 position: "absolute",
               }}
             />
           ))}
+          
           {coins.map((coin) => (
             <div
               key={coin.id}
@@ -290,13 +332,13 @@ const SurfingMiniGame = ({ birdImage }) => {
                   window.innerWidth / 6 -
                   coin.size / 2
                 }px`,
-                backgroundImage: `url(${coinPic})`, // Add background image for the coin
-                backgroundSize: "contain", // Adjust size to fit the coin
+                backgroundImage: `url(${coinPic})`,
+                backgroundSize: "contain",
                 backgroundRepeat: "no-repeat",
               }}
             />
           ))}
-          {/* Render player with background image */}
+          
           <div
             className="player-container"
             style={{
@@ -317,8 +359,7 @@ const SurfingMiniGame = ({ birdImage }) => {
                 position: "absolute",
                 width: "150px",
                 height: "150px",
-
-                backgroundImage: `url(${surfBird})`, // Use the imported image variable
+                backgroundImage: `url(${surfBird})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 zIndex: 0,
@@ -328,7 +369,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         </div>
       )}
     </div>
-  );
+  );  
 };
 
 export default SurfingMiniGame;

@@ -6,6 +6,8 @@ import obstaclePic from "../../assets/images/rock.png";
 import trickBird from "../../assets/images/trickBird.png";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import surfStart from "../../assets/videos/surfStart.gif";
+import waveCurl from "../../assets/videos/waveCurl.gif";
 
 const SurfingMiniGame = ({ birdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -25,7 +27,6 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [shredMessage, setShredMessage] = useState("");
   const [showShredMessage, setShowShredMessage] = useState(false);
   const { submitSurfingScore, authState } = useContext(AuthContext);
-  
 
   const navigate = useNavigate();
 
@@ -76,17 +77,16 @@ const SurfingMiniGame = ({ birdImage }) => {
   const endGame = async () => {
     setShredMessage(`Nice shred! You scored ${score}!!`);
     setShowShredMessage(true);
-     
-    const token = authState.user ? authState.user.token : null; // Retrieve token from authState
-      if (!token) {
-        console.error("No token found, unable to submit surfing score.");
-        return;
-      }
 
-      await submitSurfingScore(Number(score));
+    const token = authState.user ? authState.user.token : null; // Retrieve token from authState
+    if (!token) {
+      console.error("No token found, unable to submit surfing score.");
+      return;
+    }
+
+    await submitSurfingScore(Number(score));
   };
 
-  
   const resetGame = () => {
     setGameStarted(false);
     setProgress(0);
@@ -100,7 +100,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setIsGameOver(false);
     setTrickImageRotation(0); // Reset rotation
     setShowTrickImage(false); // Hide the trick image
-    setShowShredMessage(false)
+    setShowShredMessage(false);
   };
 
   const handleStartGame = () => {
@@ -303,125 +303,133 @@ const SurfingMiniGame = ({ birdImage }) => {
     <div className="surfing-game">
       {!gameStarted ? (
         <div className="start-menu">
-          <h2>Press A and D to switch lanes! Grab the coins and be careful!</h2>
+          <div className="zpop">
+            <h2>Press A and D to switch lanes</h2>
+            <h2> Grab the coins and be careful!</h2>
 
-          <button onClick={handleStartGame}>Start Game</button>
+            <button onClick={handleStartGame}>Start Game</button>
+          </div>
+          <img src={surfStart} alt="Water Visual" className="surfStart" />
         </div>
       ) : (
         <div className="game-area">
-          <div className="progress-bar">
-            <div className="progress" style={{ width: `${progress}%` }} />
-          </div>
-          <h3>Score: {score}</h3>
-          {trickMessages.map((message, index) => (
+          <img src={waveCurl} alt="Wave Curling" className="waveCurl" />
+          <div className="zpop2">
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${progress}%` }} />
+            </div>
+            <h3 className="surf-score-display">Score: {score}</h3>
+            
+            {trickMessages.map((message, index) => (
+              <div
+                key={index}
+                className="trick-popup"
+                style={{
+                  top: `${Math.random() * 80 + 10}px`,
+                  left: `${Math.random() * 90}%`,
+                }}
+              >
+                {message}
+              </div>
+            ))}
+            {showShredMessage && (
+              <div className="shred-message-container">
+                <h1 className="shred-message">{shredMessage}</h1>
+                <button onClick={handleBackToMenu}>Main Menu</button>
+                <button onClick={resetGame}>Retry?</button>
+              </div>
+            )}
+            {/* Trick Opportunity Visual */}
+            {trickOpportunity && (
+              <div className="trick-opportunity">
+                <h2 className="trick-text">MASH A!!!!!</h2>
+                <p>GOGOGOGOGOGOGOGOGO</p>
+                <img
+                  src={trickBird}
+                  alt="Trick Image"
+                  className="trick-image"
+                  style={{
+                    transform: `rotate(${trickImageRotation}deg)`, // Use the state for continuous rotation
+                    transition: "transform 0.5s",
+                    width: "150px",
+                    height: "150px",
+                    position: "absolute",
+                    top: "20%",
+                    left: "50%",
+                    transformOrigin: "center",
+                  }}
+                />
+              </div>
+            )}
+
+            {obstacles.map((obstacle) => (
+              <div
+                key={obstacle.id}
+                className={`obstacle track-${obstacle.position}`}
+                style={{
+                  width: `${obstacle.size}px`,
+                  height: `${obstacle.size}px`,
+                  bottom: `${obstacle.bottom}px`,
+                  left: `${
+                    obstacle.position * (window.innerWidth / 3) +
+                    window.innerWidth / 6 -
+                    obstacle.size / 2
+                  }px`,
+                  backgroundImage: `url(${obstacle.image}`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  position: "absolute",
+                }}
+              />
+            ))}
+
+            {coins.map((coin) => (
+              <div
+                key={coin.id}
+                className={`coin track-${coin.position}`}
+                style={{
+                  width: `${coin.size}px`,
+                  height: `${coin.size}px`,
+                  bottom: `${coin.bottom}px`,
+                  left: `${
+                    coin.position * (window.innerWidth / 3) +
+                    window.innerWidth / 6 -
+                    coin.size / 2
+                  }px`,
+                  backgroundImage: `url(${coinPic})`,
+                  backgroundSize: "contain",
+                  backgroundRepeat: "no-repeat",
+                }}
+              />
+            ))}
+
             <div
-              key={index}
-              className="trick-popup"
+              className="player-container"
               style={{
-                top: `${Math.random() * 80 + 10}px`,
-                left: `${Math.random() * 90}%`,
+                position: "absolute",
+                bottom: "50px",
+                left: `${
+                  playerPosition * (window.innerWidth / 3) +
+                  window.innerWidth / 6 -
+                  25
+                }px`,
+                width: "100px",
+                height: "100px",
               }}
             >
-              {message}
-            </div>
-          ))}
-          {showShredMessage && (
-            <div className="shred-message-container">
-              <h1 className="shred-message">{shredMessage}</h1>
-              <button onClick={handleBackToMenu}>Main Menu</button>
-              <button onClick={resetGame}>Retry?</button>
-            </div>
-          )}
-          {/* Trick Opportunity Visual */}
-          {trickOpportunity && (
-            <div className="trick-opportunity">
-              <h2 className="trick-text">MASH A!!!!!</h2>
-              <p>GOGOGOGOGOGOGOGOGO</p>
-              <img
-                src={trickBird}
-                alt="Trick Image"
-                className="trick-image"
+              <div
+                className="player"
                 style={{
-                  transform: `rotate(${trickImageRotation}deg)`, // Use the state for continuous rotation
-                  transition: "transform 0.5s",
+                  position: "absolute",
                   width: "150px",
                   height: "150px",
-                  position: "absolute",
-                  top: "20%",
-                  left: "50%",
-                  transformOrigin: "center",
+                  backgroundImage: `url(${surfBird})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  zIndex: 0,
                 }}
               />
             </div>
-          )}
-
-          {obstacles.map((obstacle) => (
-            <div
-              key={obstacle.id}
-              className={`obstacle track-${obstacle.position}`}
-              style={{
-                width: `${obstacle.size}px`,
-                height: `${obstacle.size}px`,
-                bottom: `${obstacle.bottom}px`,
-                left: `${
-                  obstacle.position * (window.innerWidth / 3) +
-                  window.innerWidth / 6 -
-                  obstacle.size / 2
-                }px`,
-                backgroundImage: `url(${obstacle.image}`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                position: "absolute",
-              }}
-            />
-          ))}
-
-          {coins.map((coin) => (
-            <div
-              key={coin.id}
-              className={`coin track-${coin.position}`}
-              style={{
-                width: `${coin.size}px`,
-                height: `${coin.size}px`,
-                bottom: `${coin.bottom}px`,
-                left: `${
-                  coin.position * (window.innerWidth / 3) +
-                  window.innerWidth / 6 -
-                  coin.size / 2
-                }px`,
-                backgroundImage: `url(${coinPic})`,
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
-              }}
-            />
-          ))}
-
-          <div
-            className="player-container"
-            style={{
-              position: "absolute",
-              bottom: "50px",
-              left: `${
-                playerPosition * (window.innerWidth / 3) +
-                window.innerWidth / 6 -
-                25
-              }px`,
-              width: "100px",
-              height: "100px",
-            }}
-          >
-            <div
-              className="player"
-              style={{
-                position: "absolute",
-                width: "150px",
-                height: "150px",
-                backgroundImage: `url(${surfBird})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                zIndex: 0,
-              }}
-            />
           </div>
         </div>
       )}

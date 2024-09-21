@@ -11,6 +11,7 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+  z-index: 2;
 }
 
 .progress-bar {
@@ -66,4 +67,41 @@
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.waveCurl {
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  background-color: black;
+  object-fit: cover;
+}
+
+.surfStart {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  background-color: black;
+  object-fit: cover;
+}
+
+.zpop {
+  z-index: 2;
+  background-color:cornsilk;
+  padding: 30px;
+  border-radius: 1000px;
+}
+
+.zpop2 {
+  z-index: 2;
+}
+
+.surf-score-display {
+  padding: 30px;
+  background-color: cornflowerblue;
+  color: white;
+  -webkit-text-stroke: 1px hotpink;
+  font-size: 20px;
+  border-radius: 25px;
+  border: coral 4px solid;
 }

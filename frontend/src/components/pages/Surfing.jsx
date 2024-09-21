@@ -4,6 +4,7 @@ import surfBird from "../../assets/images/surfBird.png";
 import coinPic from "../../assets/images/seratonin-coin.png";
 import obstaclePic from "../../assets/images/rock.png";
 
+
 const SurfingMiniGame = ({ birdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -13,23 +14,24 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [trickOpportunity, setTrickOpportunity] = useState(false);
   const [trickAttempts, setTrickAttempts] = useState(0);
   const [currentTrick, setCurrentTrick] = useState("");
-  const [playerPosition, setPlayerPosition] = useState(1); // 0: left, 1: center, 2: right
+  const [playerPosition, setPlayerPosition] = useState(1); 
   const [isGameOver, setIsGameOver] = useState(false);
   const [trickMessages, setTrickMessages] = useState([]);
-  const [targetPosition, setTargetPosition] = useState(1); // Target position for smooth movement
+  const [targetPosition, setTargetPosition] = useState(1);
 
+  // 1. Make the game shorter by increasing the progress increment
   useEffect(() => {
     let interval;
     if (gameStarted && progress < 100) {
       interval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 0.1, 100));
-      }, 300);
+        setProgress((prev) => Math.min(prev + 0.5, 100)); // Increase by 0.5 instead of 0.1
+      }, 300); // Keep the interval the same, but we are progressing faster
     }
     return () => clearInterval(interval);
   }, [gameStarted, progress]);
 
   useEffect(() => {
-    if (progress >= 50 && progress < 100 && !trickOpportunity) {
+    if (progress >= 95 && !trickOpportunity) {
       handleTrickOpportunity();
     }
     if (progress === 100) {
@@ -40,8 +42,9 @@ const SurfingMiniGame = ({ birdImage }) => {
   useEffect(() => {
     if (gameStarted) {
       initializeGameElements();
-      const obstacleInterval = setInterval(spawnObstacle, 2000);
-      const coinInterval = setInterval(spawnCoin, 3000);
+      // 2. Reduce obstacle frequency by increasing interval to 4000ms (4 seconds)
+      const obstacleInterval = setInterval(spawnObstacle, 4000);
+      const coinInterval = setInterval(spawnCoin, 3000); 
       return () => {
         clearInterval(obstacleInterval);
         clearInterval(coinInterval);
@@ -50,9 +53,9 @@ const SurfingMiniGame = ({ birdImage }) => {
   }, [gameStarted]);
 
   const handleTrickOpportunity = () => {
+    setObstacles([]); 
+    setCoins([]); 
     setTrickOpportunity(true);
-    setObstacles([]);
-    setCoins([]);
     setCurrentTrick("Press a, w, d, s in order!");
   };
 
@@ -70,7 +73,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setTrickOpportunity(false);
     setTrickAttempts(0);
     setCurrentTrick("");
-    setTargetPosition(1); // Reset target position to center
+    setTargetPosition(1); 
     setIsGameOver(false);
   };
 
@@ -83,6 +86,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setCoins([]);
   };
 
+  // Keeps the same logic for obstacle and coin spawning
   const spawnObstacle = () => {
     if (progress < 100) {
       const position = Math.floor(Math.random() * 3);

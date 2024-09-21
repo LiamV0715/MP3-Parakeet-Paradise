@@ -3,7 +3,7 @@ import "../styles/Surfing.scss";
 import surfBird from "../../assets/images/surfBird.png";
 import coinPic from "../../assets/images/seratonin-coin.png";
 import obstaclePic from "../../assets/images/rock.png";
-
+import trickBird from "../../assets/images/trickBird.png";
 
 const SurfingMiniGame = ({ birdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -14,27 +14,26 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [trickOpportunity, setTrickOpportunity] = useState(false);
   const [trickAttempts, setTrickAttempts] = useState(0);
   const [currentTrick, setCurrentTrick] = useState("");
-  const [playerPosition, setPlayerPosition] = useState(1); 
+  const [playerPosition, setPlayerPosition] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
   const [trickMessages, setTrickMessages] = useState([]);
   const [targetPosition, setTargetPosition] = useState(1);
   const [trickImageRotation, setTrickImageRotation] = useState(0); // NEW state for image rotation
   const [showTrickImage, setShowTrickImage] = useState(false); // NEW state to toggle trick image visibility
 
-
   // 1. Make the game shorter by increasing the progress increment
   useEffect(() => {
     let interval;
     if (gameStarted && progress < 100) {
       interval = setInterval(() => {
-        setProgress((prev) => Math.min(prev + 0.8, 100)); // Increase by 0.5 instead of 0.1
-      }, 300); // Keep the interval the same, but we are progressing faster
+        setProgress((prev) => Math.min(prev + 0.9, 100)); // Increase prev + x to shorten total game time
+      }, 300); // Keep the interval the same, but progressing faster
     }
     return () => clearInterval(interval);
   }, [gameStarted, progress]);
 
   useEffect(() => {
-    if (progress >= 85 && !trickOpportunity) {
+    if (progress >= 90 && !trickOpportunity) {   //The number in this line is the percentage of gameplay when the trick starts
       handleTrickOpportunity();
     }
     if (progress === 100) {
@@ -45,9 +44,8 @@ const SurfingMiniGame = ({ birdImage }) => {
   useEffect(() => {
     if (gameStarted) {
       initializeGameElements();
-      // 2. Reduce obstacle frequency by increasing interval to 4000ms (4 seconds)
-      const obstacleInterval = setInterval(spawnObstacle, 4000);
-      const coinInterval = setInterval(spawnCoin, 3000); 
+      const obstacleInterval = setInterval(spawnObstacle, 4000); //obstacle frequency
+      const coinInterval = setInterval(spawnCoin, 3000);
       return () => {
         clearInterval(obstacleInterval);
         clearInterval(coinInterval);
@@ -56,8 +54,8 @@ const SurfingMiniGame = ({ birdImage }) => {
   }, [gameStarted]);
 
   const handleTrickOpportunity = () => {
-    setObstacles([]); 
-    setCoins([]); 
+    setObstacles([]);
+    setCoins([]);
     setTrickOpportunity(true);
     setCurrentTrick("Press a, w, d, s in order!");
   };
@@ -76,7 +74,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setTrickOpportunity(false);
     setTrickAttempts(0);
     setCurrentTrick("");
-    setTargetPosition(1); 
+    setTargetPosition(1);
     setIsGameOver(false);
     setTrickImageRotation(0); // Reset rotation
     setShowTrickImage(false); // Hide the trick image
@@ -91,7 +89,6 @@ const SurfingMiniGame = ({ birdImage }) => {
     setCoins([]);
   };
 
-  // Keeps the same logic for obstacle and coin spawning
   const spawnObstacle = () => {
     if (progress < 100) {
       const position = Math.floor(Math.random() * 3);
@@ -120,39 +117,68 @@ const SurfingMiniGame = ({ birdImage }) => {
   };
 
   const handleTrickInput = (event) => {
-    const key = event.key;
-    const trickSequence = ["a", "w", "s", "d"]; // Define the correct sequence
-  
-    if (trickOpportunity) {
-      // Check if the current key matches the expected key in the sequence
-      if (trickSequence[trickAttempts] === key) {
-        setTrickAttempts((prev) => prev + 1);
-        setScore((prev) => prev + 20); // Award points with each correct key press
-        setTrickImageRotation((prev) => prev + 90); // Rotate the image
-  
-        // If the full sequence is completed
-        if (trickAttempts === 3) {
-          // Trigger the trick completed message and reset for the next trick
-          setTrickMessages((prev) => [
-            ...prev,
-            "Trick completed! Keep surfing!",
-          ]);
-          // Reset for the next round of trick input
-          setTrickAttempts(0);
-        }
-      } else {
-        // If a wrong key is pressed, reset the sequence
-        setTrickAttempts(0);
-        setTrickImageRotation(0); // Reset the image rotation
-        setTrickMessages((prev) => [
-          ...prev,
-          "Wrong key! Start the trick again!",
-        ]);
-      }
-    }
-  };
-  
+    const key = event.key.toLowerCase();
+    const trickSequence = ["a", "s", "d", "f"]; // the correct sequence
+    let currentSequence = []; // Array to track the current input sequence
 
+    if (trickOpportunity) {
+        currentSequence.push(key); // Add the current key to the input sequence
+
+        // Check if the current input matches the trick sequence
+        if (currentSequence.join('') === trickSequence.join('')) {
+            console.log('You pressed S, D, F consecutively!');
+            // Reset the current sequence after a successful match
+            currentSequence = [];
+            // Optionally, you can add any additional actions here
+        }
+
+        // Limit the input sequence length to the length of the required sequence
+        if (currentSequence.length > trickSequence.length) {
+            currentSequence.shift(); // Remove the oldest key if the sequence is too long
+        }
+        
+        // Check if the current key matches the expected key in the trickSequence
+        if (key === trickSequence[trickAttempts]) {
+            // Correct key pressed
+            setTrickAttempts((prev) => {
+                const nextAttempt = prev + 1;
+
+                // Award points only if the current key is not the last in the sequence
+                if (nextAttempt < trickSequence.length) {
+                    setScore((prev) => prev + 20); // Award points for each correct key press
+                    setTrickImageRotation((prev) => prev + 90); // Rotate the image
+                }
+
+                // If the full sequence is completed
+                if (nextAttempt === trickSequence.length) {
+                    setTrickMessages((prev) => [
+                        ...prev,
+                        "Trick completed! Keep surfing!",
+                    ]);
+                    // Reset for the next round of trick input
+                    return 0;
+                }
+
+                return nextAttempt;
+            });
+        } else {
+            // Wrong key pressed
+            if (trickAttempts > 0) {
+                setTrickMessages((prev) => [
+                    ...prev,
+                    `Wrong key! Press "${trickSequence[trickAttempts]}" next.`,
+                ]);
+            }
+            // Do not reset trickAttempts, allowing continuation from the last correct key
+        }
+        setTrickAttempts(0);
+    }
+};
+
+  
+  
+  
+  
   const handlePlayerMovement = (event) => {
     if (event.key === "a" && targetPosition > 0) {
       setTargetPosition((prev) => prev - 1); // Move left
@@ -222,16 +248,16 @@ const SurfingMiniGame = ({ birdImage }) => {
       left: playerPosition * (window.innerWidth / 3),
       right: playerPosition * (window.innerWidth / 3) + 50, // Assuming the player is 50px wide
       top: 150, // The top of the player is 150px from the bottom of the screen
-      bottom: 150 + 100 // The bottom of the player is 150px + 100px (player's height)
+      bottom: 150 + 100, // The bottom of the player is 150px + 100px (player's height)
     };
-  
+
     const elementPosition = {
       left: element.position * (window.innerWidth / 3),
       right: element.position * (window.innerWidth / 3) + element.size,
       bottom: element.bottom,
       top: element.bottom + element.size, // The top of the element is its bottom + size
     };
-  
+
     return (
       playerElement.right > elementPosition.left &&
       playerElement.left < elementPosition.right &&
@@ -239,7 +265,6 @@ const SurfingMiniGame = ({ birdImage }) => {
       playerElement.bottom > elementPosition.top // Player bottom should be greater than element top
     );
   };
-  
 
   useEffect(() => {
     window.addEventListener("keydown", handleTrickInput);
@@ -254,7 +279,8 @@ const SurfingMiniGame = ({ birdImage }) => {
     <div className="surfing-game">
       {!gameStarted ? (
         <div className="start-menu">
-          <h2>Instructions: Use a, w, d, s for tricks!</h2>
+          <h2>Press A and D to switch lanes! Grab the coins and be careful!</h2>
+          
           <button onClick={handleStartGame}>Start Game</button>
         </div>
       ) : (
@@ -275,29 +301,30 @@ const SurfingMiniGame = ({ birdImage }) => {
               {message}
             </div>
           ))}
-          
+
           {/* Trick Opportunity Visual */}
           {trickOpportunity && (
             <div className="trick-opportunity">
-              <h2 className="trick-text">TRICK TIME!!</h2>
+              <h2 className="trick-text">MASH A!!!!!</h2>
+              <p>GOGOGOGOGOGOGOGOGO</p>
               <img
-                src={trickBird} 
+                src={trickBird}
                 alt="Trick Image"
                 className="trick-image"
                 style={{
-                  transform: `rotate(${trickAttempts * 90}deg)`, // Rotate image based on attempts
-                  transition: 'transform 0.5s',
-                  width: '150px', // Adjust size as needed
-                  height: '150px', // Adjust size as needed
-                  position: 'absolute',
-                  top: '20%', // Adjust position as needed
-                  left: '50%',
-                  transformOrigin: 'center',
+                  transform: `rotate(${trickImageRotation}deg)`, // Use the state for continuous rotation
+                  transition: "transform 0.5s",
+                  width: "150px",
+                  height: "150px",
+                  position: "absolute",
+                  top: "20%",
+                  left: "50%",
+                  transformOrigin: "center",
                 }}
               />
             </div>
           )}
-  
+
           {obstacles.map((obstacle) => (
             <div
               key={obstacle.id}
@@ -318,7 +345,7 @@ const SurfingMiniGame = ({ birdImage }) => {
               }}
             />
           ))}
-          
+
           {coins.map((coin) => (
             <div
               key={coin.id}
@@ -338,7 +365,7 @@ const SurfingMiniGame = ({ birdImage }) => {
               }}
             />
           ))}
-          
+
           <div
             className="player-container"
             style={{
@@ -369,7 +396,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         </div>
       )}
     </div>
-  );  
+  );
 };
 
 export default SurfingMiniGame;

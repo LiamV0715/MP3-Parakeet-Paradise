@@ -1,6 +1,4 @@
 const User = require('../models/User');
-const SurfScore = require('../models/SurfScore');
-const FishScore = require('../models/FishScore');
 
 // Creating a new user
 const createUser = async (req, res) => {

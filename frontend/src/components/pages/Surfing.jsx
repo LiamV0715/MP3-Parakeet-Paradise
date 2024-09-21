@@ -25,6 +25,7 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [shredMessage, setShredMessage] = useState("");
   const [showShredMessage, setShowShredMessage] = useState(false);
   const { submitSurfingScore, authState } = useContext(AuthContext);
+  
 
   const navigate = useNavigate();
 
@@ -75,10 +76,10 @@ const SurfingMiniGame = ({ birdImage }) => {
   const endGame = async () => {
     setShredMessage(`Nice shred! You scored ${score}!!`);
     setShowShredMessage(true);
-    await submitSurfingScore(score); // Call score submission
+     
     const token = authState.user ? authState.user.token : null; // Retrieve token from authState
       if (!token) {
-        console.error("No token found, unable to submit fishing score.");
+        console.error("No token found, unable to submit surfing score.");
         return;
       }
 

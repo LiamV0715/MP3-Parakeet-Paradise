@@ -6,25 +6,36 @@ const passport = require("passport");
 // POST /api/surf-score
 router.post(
   "/",
-  passport.authenticate("jwt", { session: false }), // Protect route with JWT
+  passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const { stylePoints } = req.body; // Get style points from request body
-      const userId = req.user._id; // Get user ID from the JWT
+      const { stylePoints } = req.body;
+      const userId = req.user._id;
 
-      // Use findOneAndUpdate to either update or create the fish score for the user
+      if (!userId) {
+        return res.status(401).json({ error: "User not authenticated." });
+      }
+
+      if (typeof stylePoints !== "number" || stylePoints < 0) {
+        return res.status(400).json({ error: "Invalid style points value." });
+      }
+
       const updatedSurfScore = await SurfScore.findOneAndUpdate(
-        { user: userId }, // Query by user ID
-        { $max: { stylePoints: Number(stylePoints) } }, // Update only if the new fishWeight is larger
-        { new: true, upsert: true } // Upsert will create a new score if one doesn't exist
+        { user: userId },
+        { $max: { stylePoints: Number(stylePoints) } },
+        { new: true, upsert: true }
       );
 
       return res.status(201).json({
         message: "Surf score submitted successfully!",
-        surfScore: updatedSurfScore, // Return the updated or newly created score
+        surfScore: {
+          id: updatedSurfScore._id,
+          stylePoints: updatedSurfScore.stylePoints,
+          user: updatedSurfScore.user,
+        },
       });
     } catch (error) {
-      console.error("Error submitting surf score:", error);
+      console.error("Error submitting surf score:", error.message, error.stack);
       return res.status(500).json({ error: "Server error" });
     }
   }

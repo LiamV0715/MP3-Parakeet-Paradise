@@ -121,10 +121,33 @@ const AuthProvider = ({ children }) => {
       console.error("Error submitting fishing score:", error);
     }
   };
+  const submitSurfingScore = async (score) => {
+    const token = authState.user ? authState.user.token : null; // Get the token from authState
+    if (!token) {
+      console.error("No token found, unable to submit surfing score.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/api/surf-score",
+        { score: Number(score) },
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      console.log("Surfing score submitted:", response.data);
+    } catch (error) {
+      console.error("Error submitting surfing score:", error);
+    }
+  };
   
 
   return (
-    <AuthContext.Provider value={{ authState, submitFishingScore, setAuthState, login, logout, signup }}>
+    <AuthContext.Provider value={{ authState, submitFishingScore, submitSurfingScore, setAuthState, login, logout, signup }}>
       {children}
     </AuthContext.Provider>
   );

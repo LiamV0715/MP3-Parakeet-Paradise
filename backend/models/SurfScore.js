@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
 const SurfScoreSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  score: { type: Number, required: true }, // Score out of 100
-  createdAt: { type: Date, default: Date.now }
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
+  score: { type: Number, required: true }, 
 });
 
-const SurfScore = mongoose.model('SurfScore', SurfScoreSchema);
-module.exports = SurfScore;
+
+module.exports = mongoose.model("SurfScore", SurfScoreSchema);
+

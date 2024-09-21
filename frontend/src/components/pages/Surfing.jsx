@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "../styles/Surfing.scss";
 import surfBird from "../../assets/images/surfBird.png";
 import coinPic from "../../assets/images/seratonin-coin.png";
 import obstaclePic from "../../assets/images/rock.png";
 import trickBird from "../../assets/images/trickBird.png";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const SurfingMiniGame = ({ birdImage }) => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -20,6 +22,15 @@ const SurfingMiniGame = ({ birdImage }) => {
   const [targetPosition, setTargetPosition] = useState(1);
   const [trickImageRotation, setTrickImageRotation] = useState(0); // NEW state for image rotation
   const [showTrickImage, setShowTrickImage] = useState(false); // NEW state to toggle trick image visibility
+  const [shredMessage, setShredMessage] = useState("");
+  const [showShredMessage, setShowShredMessage] = useState(false);
+  const { submitSurfingScore, authState } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const handleBackToMenu = () => {
+    navigate("/"); // Navigates to the main menu page
+  };
 
   // 1. Make the game shorter by increasing the progress increment
   useEffect(() => {
@@ -33,7 +44,8 @@ const SurfingMiniGame = ({ birdImage }) => {
   }, [gameStarted, progress]);
 
   useEffect(() => {
-    if (progress >= 90 && !trickOpportunity) {   //The number in this line is the percentage of gameplay when the trick starts
+    if (progress >= 93 && !trickOpportunity) {
+      //The number in this line is the percentage of gameplay when the trick starts
       handleTrickOpportunity();
     }
     if (progress === 100) {
@@ -60,11 +72,20 @@ const SurfingMiniGame = ({ birdImage }) => {
     setCurrentTrick("Press a, w, d, s in order!");
   };
 
-  const endGame = () => {
-    alert(`Nice shred! You scored ${score}`);
-    resetGame();
+  const endGame = async () => {
+    setShredMessage(`Nice shred! You scored ${score}!!`);
+    setShowShredMessage(true);
+    await submitSurfingScore(score); // Call score submission
+    const token = authState.user ? authState.user.token : null; // Retrieve token from authState
+      if (!token) {
+        console.error("No token found, unable to submit fishing score.");
+        return;
+      }
+
+      await submitSurfingScore(Number(score));
   };
 
+  
   const resetGame = () => {
     setGameStarted(false);
     setProgress(0);
@@ -78,6 +99,7 @@ const SurfingMiniGame = ({ birdImage }) => {
     setIsGameOver(false);
     setTrickImageRotation(0); // Reset rotation
     setShowTrickImage(false); // Hide the trick image
+    setShowShredMessage(false)
   };
 
   const handleStartGame = () => {
@@ -122,63 +144,64 @@ const SurfingMiniGame = ({ birdImage }) => {
     let currentSequence = []; // Array to track the current input sequence
 
     if (trickOpportunity) {
-        currentSequence.push(key); // Add the current key to the input sequence
+      currentSequence.push(key); // Add the current key to the input sequence
 
-        // Check if the current input matches the trick sequence
-        if (currentSequence.join('') === trickSequence.join('')) {
-            console.log('You pressed S, D, F consecutively!');
-            // Reset the current sequence after a successful match
-            currentSequence = [];
-            // Optionally, you can add any additional actions here
+      // Check if the current input matches the trick sequence
+      if (currentSequence.join("") === trickSequence.join("")) {
+        console.log("You pressed S, D, F consecutively!");
+        // Reset the current sequence after a successful match
+        currentSequence = [];
+        // Optionally, you can add any additional actions here
+      }
+
+      // Limit the input sequence length to the length of the required sequence
+      if (currentSequence.length > trickSequence.length) {
+        currentSequence.shift(); // Remove the oldest key if the sequence is too long
+      }
+
+      // Check if the current key matches the expected key in the trickSequence
+      if (key === trickSequence[trickAttempts]) {
+        // Correct key pressed
+        setTrickAttempts((prev) => {
+          const nextAttempt = prev + 1;
+
+          // Award points only if the current key is not the last in the sequence
+          if (nextAttempt < trickSequence.length) {
+            setScore((prev) => prev + 20); // Award points for each correct key press
+            setTrickImageRotation((prev) => prev + 90); // Rotate the image
+          }
+
+          // If the full sequence is completed
+          if (nextAttempt === trickSequence.length) {
+            setTrickMessages((prev) => [
+              ...prev,
+              "NICE!",
+              "WOAH!",
+              "GNARLY!!!",
+              "Is that... a bird?",
+              "SWEET MOTHER MARY",
+              "OH GREAT HEAVENS!",
+            ]);
+            // Reset for the next round of trick input
+            return 0;
+          }
+
+          return nextAttempt;
+        });
+      } else {
+        // Wrong key pressed
+        if (trickAttempts > 0) {
+          setTrickMessages((prev) => [
+            ...prev,
+            `Wrong key! Press "${trickSequence[trickAttempts]}" next.`,
+          ]);
         }
-
-        // Limit the input sequence length to the length of the required sequence
-        if (currentSequence.length > trickSequence.length) {
-            currentSequence.shift(); // Remove the oldest key if the sequence is too long
-        }
-        
-        // Check if the current key matches the expected key in the trickSequence
-        if (key === trickSequence[trickAttempts]) {
-            // Correct key pressed
-            setTrickAttempts((prev) => {
-                const nextAttempt = prev + 1;
-
-                // Award points only if the current key is not the last in the sequence
-                if (nextAttempt < trickSequence.length) {
-                    setScore((prev) => prev + 20); // Award points for each correct key press
-                    setTrickImageRotation((prev) => prev + 90); // Rotate the image
-                }
-
-                // If the full sequence is completed
-                if (nextAttempt === trickSequence.length) {
-                    setTrickMessages((prev) => [
-                        ...prev,
-                        "Trick completed! Keep surfing!",
-                    ]);
-                    // Reset for the next round of trick input
-                    return 0;
-                }
-
-                return nextAttempt;
-            });
-        } else {
-            // Wrong key pressed
-            if (trickAttempts > 0) {
-                setTrickMessages((prev) => [
-                    ...prev,
-                    `Wrong key! Press "${trickSequence[trickAttempts]}" next.`,
-                ]);
-            }
-            // Do not reset trickAttempts, allowing continuation from the last correct key
-        }
-        setTrickAttempts(0);
+        // Do not reset trickAttempts, allowing continuation from the last correct key
+      }
+      setTrickAttempts(0);
     }
-};
+  };
 
-  
-  
-  
-  
   const handlePlayerMovement = (event) => {
     if (event.key === "a" && targetPosition > 0) {
       setTargetPosition((prev) => prev - 1); // Move left
@@ -280,7 +303,7 @@ const SurfingMiniGame = ({ birdImage }) => {
       {!gameStarted ? (
         <div className="start-menu">
           <h2>Press A and D to switch lanes! Grab the coins and be careful!</h2>
-          
+
           <button onClick={handleStartGame}>Start Game</button>
         </div>
       ) : (
@@ -301,7 +324,13 @@ const SurfingMiniGame = ({ birdImage }) => {
               {message}
             </div>
           ))}
-
+          {showShredMessage && (
+            <div className="shred-message-container">
+              <h1 className="shred-message">{shredMessage}</h1>
+              <button onClick={handleBackToMenu}>Main Menu</button>
+              <button onClick={resetGame}>Retry?</button>
+            </div>
+          )}
           {/* Trick Opportunity Visual */}
           {trickOpportunity && (
             <div className="trick-opportunity">

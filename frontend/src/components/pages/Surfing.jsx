@@ -149,7 +149,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         prev
           .map((obstacle) => ({
             ...obstacle,
-            bottom: obstacle.bottom - 2,
+            bottom: obstacle.bottom - 10,
           }))
           .filter((obstacle) => {
             if (obstacle.bottom < -50) return false;
@@ -165,7 +165,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         prev
           .map((coin) => ({
             ...coin,
-            bottom: coin.bottom - 2,
+            bottom: coin.bottom - 6,
           }))
           .filter((coin) => {
             if (coin.bottom < -50) return false;

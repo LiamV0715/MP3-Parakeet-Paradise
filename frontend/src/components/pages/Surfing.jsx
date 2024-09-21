@@ -149,7 +149,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         prev
           .map((obstacle) => ({
             ...obstacle,
-            bottom: obstacle.bottom - 10,
+            bottom: obstacle.bottom - 15, //CHANGE SPEED HERE
           }))
           .filter((obstacle) => {
             if (obstacle.bottom < -50) return false;
@@ -165,7 +165,7 @@ const SurfingMiniGame = ({ birdImage }) => {
         prev
           .map((coin) => ({
             ...coin,
-            bottom: coin.bottom - 6,
+            bottom: coin.bottom - 9, //CHANGE SPEED HERE
           }))
           .filter((coin) => {
             if (coin.bottom < -50) return false;
@@ -202,22 +202,26 @@ const SurfingMiniGame = ({ birdImage }) => {
   const isCollision = (element) => {
     const playerElement = {
       left: playerPosition * (window.innerWidth / 3),
-      right: playerPosition * (window.innerWidth / 3) + 50,
-      bottom: 50,
+      right: playerPosition * (window.innerWidth / 3) + 50, // Assuming the player is 50px wide
+      top: 150, // The top of the player is 150px from the bottom of the screen
+      bottom: 150 + 100 // The bottom of the player is 150px + 100px (player's height)
     };
-
+  
     const elementPosition = {
       left: element.position * (window.innerWidth / 3),
       right: element.position * (window.innerWidth / 3) + element.size,
       bottom: element.bottom,
+      top: element.bottom + element.size, // The top of the element is its bottom + size
     };
-
+  
     return (
       playerElement.right > elementPosition.left &&
       playerElement.left < elementPosition.right &&
-      playerElement.bottom > elementPosition.bottom
+      playerElement.top < elementPosition.bottom && // Player top should be less than element bottom
+      playerElement.bottom > elementPosition.top // Player bottom should be greater than element top
     );
   };
+  
 
   useEffect(() => {
     window.addEventListener("keydown", handleTrickInput);

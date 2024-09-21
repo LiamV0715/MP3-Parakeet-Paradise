@@ -9,13 +9,13 @@ router.post(
   passport.authenticate("jwt", { session: false }), // Protect route with JWT
   async (req, res) => {
     try {
-      const { score } = req.body; // Get fishWeight from request body
+      const { stylePoints } = req.body; // Get style points from request body
       const userId = req.user._id; // Get user ID from the JWT
 
       // Use findOneAndUpdate to either update or create the fish score for the user
       const updatedSurfScore = await SurfScore.findOneAndUpdate(
         { user: userId }, // Query by user ID
-        { $max: { score: Number(score) } }, // Update only if the new fishWeight is larger
+        { $max: { stylePoints: Number(stylePoints) } }, // Update only if the new fishWeight is larger
         { new: true, upsert: true } // Upsert will create a new score if one doesn't exist
       );
 

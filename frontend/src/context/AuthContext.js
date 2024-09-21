@@ -3,6 +3,7 @@ import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios'; // Using axios for consistent API calls
 import { useNavigate } from 'react-router-dom';
 
+
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
@@ -131,7 +132,7 @@ const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(
         "http://localhost:5001/api/surf-score",
-        { score: Number(score) },
+        { stylePoints: Number(score) },
         {
           headers: {
             'Authorization': `Bearer ${token}`,

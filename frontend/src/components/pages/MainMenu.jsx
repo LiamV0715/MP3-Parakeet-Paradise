@@ -57,7 +57,7 @@ const MainMenu = () => {
         </button>
         <button
           className="menu-button"
-          onClick={() => (window.location.href = "/scoreboards")}
+          onClick={() => (window.location.href = "/scoreboard")}
         >
           Scoreboards
         </button>

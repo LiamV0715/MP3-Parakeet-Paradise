@@ -1,5 +1,5 @@
 // src/context/AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios'; // Using axios for consistent API calls
 import { useNavigate } from 'react-router-dom';
 
@@ -12,6 +12,8 @@ const AuthProvider = ({ children }) => {
     loading: true,  // Keep track of loading state
     user: null, 
   });
+  const [fishScores, setFishScores] = useState([]); // Add state for scores
+  const [surfScores, setSurfScores] = useState([]);
   const navigate = useNavigate(); 
   // Fetch user data from the server using the JWT token
   const fetchUser = async () => {
@@ -47,10 +49,31 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  useEffect(() => {
-    fetchUser(); // Fetch user data when the component mounts
-  }, []);
+  
 
+  const fetchFishScores = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/api/fish-score'); 
+      setFishScores(response.data);
+    } catch (error) {
+      console.error('Error fetching fish scores:', error);
+    }
+  };
+
+  const fetchSurfScores = async () => {
+    try {
+      const response = await axios.get('http://localhost:5001/api/surf-score'); 
+      setSurfScores(response.data);
+    } catch (error) {
+      console.error('Error fetching surf scores:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFishScores(); // Fetch scores on load
+    fetchSurfScores();
+    fetchUser(); // Fetch user on load
+  }, []);
   const login = async (username, password) => {
   try {
     const response = await axios.post('http://localhost:5001/api/auth/login', {
@@ -144,11 +167,24 @@ const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error("Error submitting surfing score:", error);
     }
+    
   };
   
 
   return (
-    <AuthContext.Provider value={{ authState, submitFishingScore, submitSurfingScore, setAuthState, login, logout, signup }}>
+    <AuthContext.Provider
+    value={{
+      authState,
+      fishScores, // Pass fishScores to context
+      surfScores, // Pass surfScores to context
+      submitFishingScore,
+      submitSurfingScore,
+      setAuthState,
+      login,
+      logout,
+      signup,
+    }}
+  >
       {children}
     </AuthContext.Provider>
   );

@@ -100,3 +100,18 @@
     max-width: 80%;
     max-height: 80%;
 }
+
+.menuButtons {
+   position: absolute;
+   margin-bottom: 40%;
+   left: 70%;
+   top: 30%;
+   font-size: 3em;
+   padding: 30px;
+
+}
+
+.fishBox {
+    pointer-events: none;
+    max-width: 80%;
+}

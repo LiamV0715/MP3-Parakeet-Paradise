@@ -7,6 +7,7 @@ h2 {
 }
 
 
+
 .transparent-video {
     position: absolute;
     width: 100%;
@@ -42,6 +43,9 @@ h2 {
      padding-top: 5px;
      padding-bottom: 5px;
      margin-top: 10%;
+     border-color: coral ;
+     border: 3px solid coral;
+     
 }
 
 p {
@@ -55,6 +59,8 @@ p {
    left: -100px;
    max-height: 50%;
    pointer-events: none;
+   max-width: 500px;
+   width: 50%;
 }
 
 .bird-container {
@@ -63,7 +69,8 @@ p {
    left: -100px;
    padding-bottom: 20px;
    pointer-events: none;
-   
+   max-width: 50%;
+   max-height: 50%;
 }
 
 
@@ -74,13 +81,14 @@ p {
     width: 100%;
     background-color: black;
     object-fit: cover;
+    
 }
 
 .welcome-message {
-    font-size: 30px;
+    font-size: 35px;
     background-color: white;
     border-radius: 15px;
-    -webkit-text-stroke: 2px hotpink;
+    -webkit-text-stroke: 2px rgb(159, 67, 113);
 }
 
 button {

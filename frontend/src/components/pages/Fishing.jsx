@@ -88,17 +88,14 @@ function Fishing({ setPage }) {
 
   return (
     <div className="fishing-game">
-      <img
-        src={fishBack}
-        alt="Fish schooling visual"
-        className="fish-back"
-      />
+      <img src={fishBack} alt="Fish schooling visual" className="fish-back" />
       <div className="zpop3">
         <WelcomeMessage />
-        
+
         {gameStatus === "waiting" && (
-          
-          <button onClick={startGame} className="fishing-start">Click to start, but be Ready!</button>
+          <button onClick={startGame} className="fishing-start">
+            Click to start, but be Ready!
+          </button>
         )}
         {gameStatus === "started" && showReelButton && (
           <button
@@ -112,12 +109,17 @@ function Fishing({ setPage }) {
         {gameStatus === "won" && (
           <div>
             <h1 className="fishWin">You caught a {fishWeight} lb fish!</h1>
-            <img
-              src={getFishImage(fishWeight)}
-              alt="Caught fish"
-              className="fish-image"
-            />
-            <button onClick={handleBackToMenu}>Main Menu</button>
+            <div className="fishBox">
+              <img
+                src={getFishImage(fishWeight)}
+                alt="Caught fish"
+                className="fish-image"
+              />
+            </div>
+            <div className="menuButtons">
+              <button onClick={handleBackToMenu}>Main Menu</button>
+              <button onClick={startGame}>Retry</button>
+            </div>
           </div>
         )}
         {gameStatus === "lost" && (
@@ -125,13 +127,14 @@ function Fishing({ setPage }) {
             <h1 className="fish-lost">Fish lost!</h1>
             <img src={fishLost} alt="Fish lost" className="fish-lost-pic" />
             <div className="fish-lost-buttons">
-            <button onClick={startGame}>Retry</button>
-            <button onClick={handleBackToMenu}>Main Menu</button>
+              <div className="menuButtons">
+                <button onClick={startGame}>Retry</button>
+                <button onClick={handleBackToMenu}>Main Menu</button>
+              </div>
             </div>
           </div>
         )}
       </div>
-      
     </div>
   );
 }

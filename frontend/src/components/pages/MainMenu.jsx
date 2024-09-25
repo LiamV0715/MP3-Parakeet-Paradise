@@ -42,7 +42,7 @@ const MainMenu = () => {
           </div>
         )}
 
-        <h1>Main Menu</h1>
+        
         <button
           className="menu-button"
           onClick={() => (window.location.href = "/surfing")}

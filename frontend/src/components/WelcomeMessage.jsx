@@ -12,7 +12,7 @@ const WelcomeMessage = () => {
       } else {
         setMessage("Please log in for all features");
       }
-    }, 0); // if there needs to be a wait
+    }, 0); // if there needs to be a wait for testing
 
     return () => clearTimeout(timer); // Cleanup timer on unmount
   }, [authState]);

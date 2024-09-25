@@ -2,16 +2,15 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "../styles/Login.scss";
-import VHSquick from '../../assets/videos/VHSquick.mp4';
-import backVid from '../../assets/videos/beach.gif'
-import blueBird from '../../assets/images/blueBird.png';  
-import pinkBird from '../../assets/images/pinkBird.png';
-import greenBird from '../../assets/images/greenBird.png';
-import yellowBird from '../../assets/images/yellowBird.png';
-
+import VHSquick from "../../assets/videos/VHSquick.mp4";
+import backVid from "../../assets/videos/beach.gif";
+import blueBird from "../../assets/images/blueBird.png";
+import pinkBird from "../../assets/images/pinkBird.png";
+import greenBird from "../../assets/images/greenBird.png";
+import yellowBird from "../../assets/images/yellowBird.png";
 
 const Login = () => {
-  const { login, signup } = useContext(AuthContext); // Change here
+  const { login, signup } = useContext(AuthContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [birdColor, setBirdColor] = useState("blue");
@@ -22,7 +21,7 @@ const Login = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await signup(username, password, birdColor); // Change here
+      await signup(username, password, birdColor);
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -91,10 +90,10 @@ const Login = () => {
               </button>
             </form>
             <div className="bird-image-container">
-            <img src={blueBird} alt="Blue Bird" className="blue-bird" />
-            <img src={greenBird} alt="Green Bird" className="green-bird" />
-            <img src={pinkBird} alt="Pink Bird" className="pink-bird" />
-            <img src={yellowBird} alt="Yellow Bird" className="yellow-bird" />
+              <img src={blueBird} alt="Blue Bird" className="blue-bird" />
+              <img src={greenBird} alt="Green Bird" className="green-bird" />
+              <img src={pinkBird} alt="Pink Bird" className="pink-bird" />
+              <img src={yellowBird} alt="Yellow Bird" className="yellow-bird" />
             </div>
           </>
         ) : (
@@ -128,7 +127,6 @@ const Login = () => {
             >
               Register
             </button>
-            
           </>
         )}
       </div>

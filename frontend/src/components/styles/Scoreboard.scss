@@ -17,14 +17,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;  // Full screen height
+  height: 100vh;  
   background-color: black; 
   width: 100%;
 
   h2 {
     font-size: 6rem;
     color: yellow;
-    text-shadow: 2px 2px 5px red, -2px -2px 5px blue; // Retro arcade glow effect
+    text-shadow: 2px 2px 5px red, -2px -2px 5px blue; 
     margin-bottom: 2rem;
     padding-left: 30px;
   }
@@ -47,7 +47,7 @@
     border-radius: 10px;
     width: 100%;
     text-align: left;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); // Arcade-style shadow
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
     border: 3px solid rgb(255, 37, 172);
     transition: transform 0.3s;
     -webkit-text-stroke: 1px rgb(0, 85, 44);

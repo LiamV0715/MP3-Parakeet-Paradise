@@ -9,12 +9,13 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [authState, setAuthState] = useState({
     isAuthenticated: false,
-    loading: true,  // Keep track of loading state
+    loading: true,  
     user: null, 
   });
-  const [fishScores, setFishScores] = useState([]); // Add state for scores
+  const [fishScores, setFishScores] = useState([]); // state for scores
   const [surfScores, setSurfScores] = useState([]);
   const navigate = useNavigate(); 
+
   // Fetch user data from the server using the JWT token
   const fetchUser = async () => {
     try {
@@ -32,7 +33,7 @@ const AuthProvider = ({ children }) => {
           setAuthState({
             isAuthenticated: true,
             loading: false,
-            user: { ...response.data, token },  // Response from Passport should include the user data
+            user: { ...response.data, token },  
           });
         } else {
           // If token is invalid, clear auth state and token
@@ -40,7 +41,7 @@ const AuthProvider = ({ children }) => {
           localStorage.removeItem('token');
         }
       } else {
-        // No token in localStorage
+        // No token in localStorage setting
         setAuthState({ isAuthenticated: false, loading: false, user: null });
       }
     } catch (error) {
@@ -70,9 +71,9 @@ const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchFishScores(); // Fetch scores on load
+    fetchFishScores(); // Fetches data on page load
     fetchSurfScores();
-    fetchUser(); // Fetch user on load
+    fetchUser(); 
   }, []);
   const login = async (username, password) => {
   try {
@@ -82,7 +83,7 @@ const AuthProvider = ({ children }) => {
     });
 
     if (response.status === 200) {
-      const { token, user } = response.data;  // Assuming your backend returns token & user
+      const { token, user } = response.data;  
       localStorage.setItem('token', token);   // Store token in localStorage
 
       // Update authState and immediately fetch user data
@@ -146,7 +147,7 @@ const AuthProvider = ({ children }) => {
     }
   };
   const submitSurfingScore = async (score) => {
-    const token = authState.user ? authState.user.token : null; // Get the token from authState
+    const token = authState.user ? authState.user.token : null; 
     if (!token) {
       console.error("No token found, unable to submit surfing score.");
       return;
@@ -175,8 +176,8 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
     value={{
       authState,
-      fishScores, // Pass fishScores to context
-      surfScores, // Pass surfScores to context
+      fishScores, 
+      surfScores, 
       submitFishingScore,
       submitSurfingScore,
       setAuthState,

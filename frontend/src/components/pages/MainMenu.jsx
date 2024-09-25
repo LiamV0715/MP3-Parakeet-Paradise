@@ -2,12 +2,12 @@ import React, { useState, useContext } from "react";
 import "../styles/Menu.scss";
 import WelcomeMessage from "../WelcomeMessage";
 import BirdImage from "../BirdImage";
-import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
+import { AuthContext } from "../../context/AuthContext";
 import VHSintro from "../../assets/videos/VHSbig.gif";
 import backVid from "../../assets/videos/beach.gif";
 
 const MainMenu = () => {
-  const { authState, setAuthState } = useContext(AuthContext); // Access authState from AuthContext
+  const { authState, setAuthState } = useContext(AuthContext);
 
   const handleLogout = () => {
     setAuthState({ isAuthenticated: false, user: null });
@@ -28,10 +28,14 @@ const MainMenu = () => {
   return (
     <div className="main-menu-container">
       <div className="video-container">
-        <img src={VHSintro} alt="Filter Animation" className="transparent-video" />
+        <img
+          src={VHSintro}
+          alt="Filter Animation"
+          className="transparent-video"
+        />
       </div>
       <img src={backVid} alt="Beach Animation" className="background-vid" />
-      <div className='behind-video'>
+      <div className="behind-video">
         <WelcomeMessage />
 
         {!authState.user && ( // Only show modal if user is not logged in
@@ -42,7 +46,6 @@ const MainMenu = () => {
           </div>
         )}
 
-        
         <button
           className="menu-button"
           onClick={() => (window.location.href = "/surfing")}
@@ -73,7 +76,7 @@ const MainMenu = () => {
           {authState.user ? "Log Out" : "Log In"}
         </button>
       </div>
-      <BirdImage className='bird-image-menu'/>
+      <BirdImage className="bird-image-menu" />
     </div>
   );
 };

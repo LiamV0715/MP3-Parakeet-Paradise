@@ -22,14 +22,14 @@ app.use(
 );
 
 // Middleware
-app.use(express.json()); // For parsing application/json
+app.use(express.json()); 
 app.use(passport.initialize());
 
 // Routes
 app.use("/api/auth", authRoutes); // Handles authentication routes
 // app.use("/users", userRoutes); // Handles user-related routes (currently not favored method)
-app.use("/api/fish-score", fishingScoreRoutes); // Handles fishing score routes
-app.use("/api/surf-score", surfingScoreRoutes); // Handles surfing score routes
+app.use("/api/fish-score", fishingScoreRoutes); // Handles fishing score 
+app.use("/api/surf-score", surfingScoreRoutes); // Handles surfing score 
 
 
 // Connect to MongoDB

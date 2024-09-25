@@ -48,24 +48,24 @@ form {
   .blue-bird {
     z-index: 1;
     left: 1%;  /* Adjust for overlap */
-    transform: translateY(-10px); /* Slight lift for effect */
+    transform: translateY(-10px); 
   }
   
   .green-bird {
     z-index: 2;
     left: 20%;  /* Adjust for overlap */
-    transform: translateY(-20px); /* Lift more than the blue bird */
+    transform: translateY(-20px); /* Lift more */
   }
   
   .pink-bird {
     z-index: 3;
-    left: 40%;  /* Adjust for overlap */
-    transform: translateY(-15px); /* Slight lift */
+    left: 40%;  
+    transform: translateY(-15px); 
   }
   
   .yellow-bird {
     z-index: 4;
-    left: 60%;  /* Adjust for overlap */
+    left: 60%;  
   }
 
   @keyframes hover-wave {
@@ -73,7 +73,7 @@ form {
       transform: translateY(0); /* Start and end at the original position */
     }
     50% {
-      transform: translateY(-20px); /* Move up by 20px at the peak of the hover */
+      transform: translateY(-20px); /* set hover height */
     }
   }
 

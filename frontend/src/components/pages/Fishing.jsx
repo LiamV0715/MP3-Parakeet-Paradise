@@ -71,7 +71,7 @@ function Fishing({ setPage }) {
         return;
       }
 
-      await submitFishingScore(Number(weight)); // Convert to number if necessary, token is already in the function
+      await submitFishingScore(Number(weight)); // Convert to number if necessary, token is already passed
     }
   };
 
@@ -81,10 +81,11 @@ function Fishing({ setPage }) {
         if (gameStatus === "started" && !isCatching) {
           setGameStatus("lost");
         }
-      }, 400);
+      }, 450);
       return () => clearTimeout(lostTimer);
     }
   }, [showReelButton, gameStatus, isCatching]);
+  // the number above controls how long users have to catch a fish
 
   return (
     <div className="fishing-game">

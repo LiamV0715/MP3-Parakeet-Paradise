@@ -8,7 +8,7 @@ import yellowBird from '../assets/images/yellowBird.png';
 const BirdImage = () => {
   const { authState } = useContext(AuthContext);
   
-  // Destructure the birdColor from the user object in authState
+  // Get the birdColor from the user object in authState and destructure
   const { birdColor } = authState.user || {};
 
   // Conditionally select the bird image based on birdColor
@@ -23,7 +23,7 @@ const BirdImage = () => {
       case 'yellow':
         return yellowBird;
       default:
-        return null;  // Return null if no birdColor is set
+        return null; 
     }
   };
 
@@ -36,7 +36,7 @@ const BirdImage = () => {
           className="responsive-bird" 
         />
       ) : (
-        <p>No bird color selected</p>  // Display message if no bird color is set
+        <p>No bird color selected</p>  
       )}
     </div>
   );

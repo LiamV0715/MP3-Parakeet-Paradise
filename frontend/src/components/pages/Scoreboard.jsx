@@ -11,32 +11,37 @@ const Scoreboard = () => {
     navigate("/"); // Navigates to the main menu page
   };
   // Helper function to combine and sum fish and surf scores
-  const combineScores = () => {
-    const combined = {};
+  // Helper function to combine and sum fish and surf scores, and sort by total score
+const combineScores = () => {
+  const combined = {};
 
-    // Process fishScores and add them to the combined object
-    fishScores.forEach((fish) => {
-      const username = fish.user.username;
-      if (!combined[username]) {
-        combined[username] = { fishWeight: 0, stylePoints: 0 };
-      }
-      combined[username].fishWeight = fish.fishWeight;
-    });
+  // Process fishScores and add them to the combined object
+  fishScores.forEach((fish) => {
+    const username = fish.user.username;
+    if (!combined[username]) {
+      combined[username] = { fishWeight: 0, stylePoints: 0 };
+    }
+    combined[username].fishWeight = fish.fishWeight;
+  });
 
-    // Process surfScores and add them to the combined object
-    surfScores.forEach((surf) => {
-      const username = surf.user.username;
-      if (!combined[username]) {
-        combined[username] = { fishWeight: 0, stylePoints: 0 };
-      }
-      combined[username].stylePoints = surf.stylePoints;
-    });
+  // Process surfScores and add them to the combined object
+  surfScores.forEach((surf) => {
+    const username = surf.user.username;
+    if (!combined[username]) {
+      combined[username] = { fishWeight: 0, stylePoints: 0 };
+    }
+    combined[username].stylePoints = surf.stylePoints;
+  });
 
-    return Object.entries(combined).map(([username, scores]) => ({
+  // Convert the combined object to an array and sort by totalScore in descending order
+  return Object.entries(combined)
+    .map(([username, scores]) => ({
       username,
       totalScore: scores.fishWeight + scores.stylePoints,
-    }));
-  };
+    }))
+    .sort((a, b) => b.totalScore - a.totalScore); // Sort in descending order by totalScore
+};
+
 
   const combinedScores = combineScores(); // Get combined score data
 
@@ -50,7 +55,7 @@ const Scoreboard = () => {
             {combinedScores.length > 0 ? (
               combinedScores.map((data, index) => (
                 <li key={index}>
-                  {data.username}: {data.totalScore} total points
+                  {index + 1}. {data.username}: {data.totalScore} total points
                 </li>
               ))
             ) : (
@@ -65,9 +70,9 @@ const Scoreboard = () => {
           <h2>Fish Scores</h2>
           <ul>
             {fishScores.length > 0 ? (
-              fishScores.map((data) => (
+              fishScores.map((data, index) => (
                 <li key={data._id}>
-                  {data.user.username}: {data.fishWeight} lbs
+                  {index + 1}. {data.user.username}: {data.fishWeight} lbs
                 </li>
               ))
             ) : (
@@ -82,9 +87,9 @@ const Scoreboard = () => {
           <h2>Surf Scores</h2>
           <ul>
             {surfScores.length > 0 ? (
-              surfScores.map((data) => (
+              surfScores.map((data, index) => (
                 <li key={data._id}>
-                  {data.user.username}: {data.stylePoints} style points
+                  {index + 1}. {data.user.username}: {data.stylePoints} style points
                 </li>
               ))
             ) : (
@@ -95,6 +100,7 @@ const Scoreboard = () => {
       );
     }
   };
+  
 
   return (
     <div className="scoreboard">

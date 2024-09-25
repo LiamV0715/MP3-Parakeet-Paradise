@@ -41,4 +41,19 @@ router.post(
   }
 );
 
+// GET /api/surf-score
+router.get("/", async (req, res) => {
+  try {
+    const surfScores = await SurfScore.find()
+      .populate("user", "username birdColor") 
+      .sort({ stylePoints: -1 }); 
+
+    return res.status(200).json(surfScores);
+  } catch (error) {
+    console.error("Error fetching surf scores:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 module.exports = router;

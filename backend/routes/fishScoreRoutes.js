@@ -30,4 +30,19 @@ router.post(
   }
 );
 
+// GET /api/fish-score
+router.get("/", async (req, res) => {
+  try {
+    // Fetch all fish scores, sorted by fishWeight in descending order
+    const fishScores = await FishScore.find()
+      .populate("user", "username birdColor") // Assuming FishScore model references the User model
+      .sort({ fishWeight: -1 }); // Sort by fishWeight, descending
+
+    return res.status(200).json(fishScores);
+  } catch (error) {
+    console.error("Error fetching fish scores:", error);
+    return res.status(500).json({ error: "Server error" });
+  }
+});
+
 module.exports = router;

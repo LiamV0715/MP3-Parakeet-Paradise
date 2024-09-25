@@ -39,22 +39,23 @@ View your standings on three leaderboards:
 ## Technologies Used
 ### Front End:
 
-React with JSX for the user interface and routing (react-router-dom v6)
-SCSS for styling and animations
-Axios for API calls to communicate with the back end
-Webpack for module bundling
-Visual Assets made in Adobe Photoshop 2024 and Adobe Premiere 2024
+1. React with JSX for the user interface and routing (react-router-dom v6)
+2. SCSS for styling and animations
+3. Axios for API calls to communicate with the back end
+4. Webpack for module bundling
+5. Visual Assets made in Adobe Photoshop 2024 and Adobe Premiere 2024
 
 ### Back End:
 
-Node.js with Express for the server
-Mongoose for MongoDB integration
-Passport-JWT for user authentication
-CORS to enable secure cross-origin requests
+1. Node.js with Express for the server
+2. Mongoose for MongoDB integration
+3. Passport-JWT for user authentication
+4. CORS to enable secure cross-origin requests
+
 ### Database:
 
-MongoDB Atlas with Mongoose ORM to store users, surfing, and fishing scores in separate collections
-JWT for secure token-based authentication
+1. MongoDB Atlas with Mongoose ORM to store users, surfing, and fishing scores in separate collections
+2. JWT for secure token-based authentication
 
 ---
 
@@ -69,4 +70,4 @@ Responsive Design: Some UI elements may not scale properly on smaller screens. T
 
 ---
 
-Created by Liam Vermette for North Carolina State University Software Development Bootcamp on 9/25/2024
+#### Created by Liam Vermette for North Carolina State University Software Development Bootcamp on 9/25/2024

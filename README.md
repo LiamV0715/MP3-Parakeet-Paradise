@@ -23,7 +23,7 @@ The website always opens to the login/register route when new users open the URL
 
 ### Main Menu
 
-From the main menu, you can:
+From the main menu, you can see your selected bird color and username displayed as well as the following route buttons:
 #### Go Surfing!: 
 Play the surfing mini-game, where your parakeet catches waves and racks up points based on coins collected, obstacles avoided and flips performed at the ending "trick opportunity"!
 #### Go Fishing!: 

@@ -14,7 +14,7 @@ Growing up, I had both cats and some parakeets, and I think cats are becoming ov
 
 ## How to Use
 ### Running Your Own Instance
-To run the project on your machine, git clone the repository down to your coding folder. Then, open two seperate terminals on the cloned repository and run: "cd backend" and "cd frontend" in each terminal respectively. Run "npm init -y" followed by "npm install --legacy-peer-deps" in each the frontend and backend terminal to install the two node module packages.
+To run the project on your machine, git clone the repository down to your coding folder. Then, open two seperate terminals on the cloned repository and run: "cd backend" and "cd frontend" in each terminal respectively. Run "npm init -y" followed by "npm install --legacy-peer-deps" in each the frontend and backend terminal to install the two node module packages. Finally, run "npm start" in first the backend and then the frontend to start the scripts. You'll also need to set up a .env file in each the front and back end. The back end env needs to contain a PORT, which will be used to make requests through Authcontext.js in the front end. To troubleshoot front to back end connection, check that the URL in your backend env matches the URL's in the Authcontext (ex:localhost::5001). The back end env also needs a JWT session secret (generated individually), and a MONGO_URI link, which directs to your MongoDB. The front end env file can contain any PORT of your choice to create a local development environment (ex:localhost::3000). Best of luck!
 
 ---
 
@@ -62,7 +62,7 @@ View your standings on three leaderboards:
 ## Bugs and Unfinished Features
 Immediate Fish Spawning in Fishing Game: After restarting the fishing mini-game, there's a chance that the fish appears instantly, which goes from funny to frustrating when it happens consecutively.
 
-Leaderboard Crowns/Portrait: Addin a crown to the conditionally rendered scoreboards proved more time consuming then expected, let alone making/positioning the correct bird color as a portrait.
+Leaderboard Crowns/Portrait: Adding a crown to the conditionally rendered scoreboards proved more time consuming then expected, let alone making/positioning the correct bird color as a portrait.
 
 Persistent User Session: The user is indefinetely logged in. It may be better to make the token expire after a set time to decrease risk of overloading the database.
 

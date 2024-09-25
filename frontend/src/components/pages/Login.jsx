@@ -4,6 +4,10 @@ import { useNavigate } from "react-router-dom";
 import "../styles/Login.scss";
 import VHSquick from '../../assets/videos/VHSquick.mp4';
 import backVid from '../../assets/videos/beach.gif'
+import blueBird from '../../assets/images/blueBird.png';  
+import pinkBird from '../../assets/images/pinkBird.png';
+import greenBird from '../../assets/images/greenBird.png';
+import yellowBird from '../../assets/images/yellowBird.png';
 
 
 const Login = () => {
@@ -86,6 +90,10 @@ const Login = () => {
                 Register
               </button>
             </form>
+            <img src={blueBird} alt="Blue Bird" className="blue-bird" />
+            <img src={greenBird} alt="Green Bird" className="green-bird" />
+            <img src={pinkBird} alt="Pink Bird" className="pink-bird" />
+            <img src={yellowBird} alt="Yellow Bird" className="yellow-bird" />
           </>
         ) : (
           <>
@@ -118,6 +126,7 @@ const Login = () => {
             >
               Register
             </button>
+            
           </>
         )}
       </div>

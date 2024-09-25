@@ -95,8 +95,10 @@ function Fishing({ setPage }) {
       />
       <div className="zpop3">
         <WelcomeMessage />
+        
         {gameStatus === "waiting" && (
-          <button onClick={startGame} className="fishing-start">Start Game</button>
+          
+          <button onClick={startGame} className="fishing-start">Click to start, but be Ready!</button>
         )}
         {gameStatus === "started" && showReelButton && (
           <button
@@ -109,7 +111,7 @@ function Fishing({ setPage }) {
         )}
         {gameStatus === "won" && (
           <div>
-            <h1>You caught a {fishWeight} lb fish!</h1>
+            <h1 className="fishWin">You caught a {fishWeight} lb fish!</h1>
             <img
               src={getFishImage(fishWeight)}
               alt="Caught fish"

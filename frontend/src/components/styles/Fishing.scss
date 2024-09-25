@@ -43,6 +43,24 @@
   border: coral 4px solid;
 }
 
+.instructions {
+    display: absolute;
+    text-align: left;
+    padding: 2em;
+    margin-top: 10%;
+    background-color: darkmagenta;
+    color: white;
+  -webkit-text-stroke: 1px hotpink;
+  font-size: 20px;
+  border-radius: 25px;
+  border: coral 4px solid;
+}
+
+.fishWin {
+    background-color: azure;
+    font-size: 4em;
+}
+
 .fish-lost {
     display: flex;
     justify-content: center;

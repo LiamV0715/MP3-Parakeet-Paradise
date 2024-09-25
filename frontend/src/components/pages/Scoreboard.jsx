@@ -1,11 +1,15 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext"; // Adjust the path as needed
 import scoreBack from "../../assets/videos/ScoreboardBack.gif";
 
 const Scoreboard = () => {
   const { fishScores, surfScores } = useContext(AuthContext); // Use useContext to access AuthContext
-  const [visibleScoreboard, setVisibleScoreboard] = useState("combined"); // State for the visible scoreboard
-
+  const [visibleScoreboard, setVisibleScoreboard] = useState("combined");
+  const navigate = useNavigate(); // State for the visible scoreboard
+  const handleBackToMenu = () => {
+    navigate("/"); // Navigates to the main menu page
+  };
   // Helper function to combine and sum fish and surf scores
   const combineScores = () => {
     const combined = {};
@@ -107,6 +111,7 @@ const Scoreboard = () => {
           <button onClick={() => setVisibleScoreboard("surf")}>
             Surf Scores
           </button>
+          <button onClick={handleBackToMenu}>Main Menu</button>
         </div>
 
         {/* Render the selected scoreboard */}

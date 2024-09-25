@@ -43,6 +43,7 @@ React with JSX for the user interface and routing (react-router-dom v6)
 SCSS for styling and animations
 Axios for API calls to communicate with the back end
 Webpack for module bundling
+Visual Assets made in Adobe Photoshop 2024 and Adobe Premiere 2024
 
 ### Back End:
 
@@ -59,6 +60,13 @@ JWT for secure token-based authentication
 
 ## Bugs and Unfinished Features
 Immediate Fish Spawning in Fishing Game: After restarting the fishing mini-game, there's a chance that the fish appears instantly, which goes from funny to frustrating when it happens consecutively.
+
 Leaderboard Crowns/Portrait: Addin a crown to the conditionally rendered scoreboards proved more time consuming then expected, let alone making/positioning the correct bird color as a portrait.
+
 Persistent User Session: The user is indefinetely logged in. It may be better to make the token expire after a set time to decrease risk of overloading the database.
+
 Responsive Design: Some UI elements may not scale properly on smaller screens. The first post-deployment updates will focus on making the game fully responsive, especially the menu bird and background videos.
+
+---
+
+Created by Liam Vermette for North Carolina State University Software Development Bootcamp on 9/25/2024

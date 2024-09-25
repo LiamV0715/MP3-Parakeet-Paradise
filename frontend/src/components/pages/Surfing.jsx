@@ -138,7 +138,8 @@ const SurfingMiniGame = ({ birdImage }) => {
       setCoins((prev) => [...prev, newCoin]);
     }
   };
-
+  // the following function was supposed to record a sequence of keys, but ending up being too cumbersome to take priority.
+  // It worked out that players mash A instead of hitting the sequence
   const handleTrickInput = (event) => {
     const key = event.key.toLowerCase();
     const trickSequence = ["a", "s", "d", "f"]; // the correct sequence
@@ -197,7 +198,6 @@ const SurfingMiniGame = ({ birdImage }) => {
             `Wrong key! Press "${trickSequence[trickAttempts]}" next.`,
           ]);
         }
-        // Do not reset trickAttempts, allowing continuation from the last correct key
       }
       setTrickAttempts(0);
     }
@@ -222,7 +222,7 @@ const SurfingMiniGame = ({ birdImage }) => {
           .filter((obstacle) => {
             if (obstacle.bottom < -50) return false;
             if (isCollision(obstacle)) {
-              setScore((prev) => prev - 5);
+              setScore((prev) => prev - 15);
               return false;
             }
             return true;
@@ -238,7 +238,7 @@ const SurfingMiniGame = ({ birdImage }) => {
           .filter((coin) => {
             if (coin.bottom < -50) return false;
             if (isCollision(coin)) {
-              setScore((prev) => prev + 5);
+              setScore((prev) => prev + 15);
               return false;
             }
             return true;
@@ -270,7 +270,7 @@ const SurfingMiniGame = ({ birdImage }) => {
   const isCollision = (element) => {
     const playerElement = {
       left: playerPosition * (window.innerWidth / 3),
-      right: playerPosition * (window.innerWidth / 3) + 50, // Assuming the player is 50px wide
+      right: playerPosition * (window.innerWidth / 3) + 50,
       top: 150, // The top of the player is 150px from the bottom of the screen
       bottom: 150 + 100, // The bottom of the player is 150px + 100px (player's height)
     };
@@ -279,7 +279,7 @@ const SurfingMiniGame = ({ birdImage }) => {
       left: element.position * (window.innerWidth / 3),
       right: element.position * (window.innerWidth / 3) + element.size,
       bottom: element.bottom,
-      top: element.bottom + element.size, // The top of the element is its bottom + size
+      top: element.bottom + element.size,
     };
 
     return (
@@ -319,7 +319,7 @@ const SurfingMiniGame = ({ birdImage }) => {
               <div className="progress" style={{ width: `${progress}%` }} />
             </div>
             <h3 className="surf-score-display">Score: {score}</h3>
-            
+
             {trickMessages.map((message, index) => (
               <div
                 key={index}
@@ -332,6 +332,30 @@ const SurfingMiniGame = ({ birdImage }) => {
                 {message}
               </div>
             ))}
+
+            {/* Trick Opportunity Visual */}
+            {trickOpportunity && (
+              <div className="trick-opportunity">
+                <h2 className="trick-text">MASH A!!!!!</h2>
+                <p className="gogogo">GOGOGOGOGOGOGOGOGO</p>
+                <img
+                  src={trickBird}
+                  alt="Trick Image"
+                  className="trick-image"
+                  style={{
+                    transform: `rotate(${trickImageRotation}deg)`, // continuous rotation
+                    transition: "transform 0.5s",
+                    width: "300px",
+                    height: "300px",
+                    position: "absolute",
+                    top: "20%",
+                    left: "60%",
+                    transformOrigin: "center",
+                    zIndex: "0",
+                  }}
+                />
+              </div>
+            )}
             {showShredMessage && (
               <div className="shred-message-container">
                 <h1 className="shred-message">{shredMessage}</h1>
@@ -339,29 +363,6 @@ const SurfingMiniGame = ({ birdImage }) => {
                 <button onClick={resetGame}>Retry?</button>
               </div>
             )}
-            {/* Trick Opportunity Visual */}
-            {trickOpportunity && (
-              <div className="trick-opportunity">
-                <h2 className="trick-text">MASH A!!!!!</h2>
-                <p>GOGOGOGOGOGOGOGOGO</p>
-                <img
-                  src={trickBird}
-                  alt="Trick Image"
-                  className="trick-image"
-                  style={{
-                    transform: `rotate(${trickImageRotation}deg)`, // Use the state for continuous rotation
-                    transition: "transform 0.5s",
-                    width: "150px",
-                    height: "150px",
-                    position: "absolute",
-                    top: "20%",
-                    left: "50%",
-                    transformOrigin: "center",
-                  }}
-                />
-              </div>
-            )}
-
             {obstacles.map((obstacle) => (
               <div
                 key={obstacle.id}
@@ -415,6 +416,7 @@ const SurfingMiniGame = ({ birdImage }) => {
                 }px`,
                 width: "100px",
                 height: "100px",
+                paddingRight: "50px",
               }}
             >
               <div

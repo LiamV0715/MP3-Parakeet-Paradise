@@ -67,6 +67,7 @@
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
 
 .waveCurl {
@@ -104,4 +105,25 @@
   font-size: 20px;
   border-radius: 25px;
   border: coral 4px solid;
+}
+
+.trick-text {
+   background-color: aquamarine;
+   border-radius: 25px;
+}
+
+.gogogo {
+    font-size: 7em;
+    -webkit-text-stroke: 2px rgb(243, 72, 158);
+}
+
+.shred-message-container {
+z-index: 5;
+color: antiquewhite;
+-webkit-text-stroke: 2px rgb(72, 243, 212);
+font-size: 4em;
+background-color: coral;
+border: 8px solid rgb(50, 95, 121);
+border-radius: 10px;
+padding-bottom: 10px;
 }

@@ -4,7 +4,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcryptjs'); 
 const authController = require("../controllers/authController");
-const authenticate = require("../middleware/authMiddleware");
+
 const passport = require('passport');
 // Import secret from environment variables
 const JWT_SECRET = process.env.JWT_SECRET;

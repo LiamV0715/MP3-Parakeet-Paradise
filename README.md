@@ -19,7 +19,7 @@ To run the project on your machine, git clone the repository down to your coding
 ---
 
 ### Sign Up / Log In:
-The website should always open to the login/register route when new users open the URL. Logging in allows you to set a username and password, track your high scores and pick your parakeet color! Once registered or logged in, users are redirected to the main menu.
+The website always opens to the login/register route when new users open the URL. Logging in allows you to set a username and password, track your high scores and pick your parakeet color! Once registered or logged in, users are redirected to the main menu.
 
 ### Main Menu
 

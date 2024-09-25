@@ -1,43 +1,59 @@
-.scoreboard-container {
-    text-align: center;
-    .tabs {
-      button {
-        margin: 10px;
-        padding: 10px;
-        &.active {
-          background-color: #ffc107;
-        }
-      }
-    }
-    .score-list {
-      list-style-type: none;
-      padding: 0;
-      li {
-        display: flex;
-        align-items: center;
-        margin: 10px 0;
-        .parakeet-icon {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          margin-right: 10px;
-        }
-        .username {
-          flex-grow: 1;
-          text-align: left;
-        }
-        .score {
-          font-weight: bold;
-        }
-        .crown {
-          margin-right: 10px;
-          font-size: 20px;
-        }
-      }
-    }
-    .main-menu-button {
-      margin-top: 20px;
-      padding: 10px 20px;
+.scoreBack {
+  z-index: 0;
+  position: absolute;
+  width: 100%;
+  background-color: black;
+  object-fit: cover;
+}
+
+.zpop4 {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+.scoreboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;  // Full screen height
+  background-color: black; 
+  width: 100%;
+
+  h2 {
+    font-size: 6rem;
+    color: yellow;
+    text-shadow: 2px 2px 5px red, -2px -2px 5px blue; // Retro arcade glow effect
+    margin-bottom: 2rem;
+    padding-left: 30px;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin: 0;
+    width: 90%; 
+    min-width: 70%;
+  }
+
+  li {
+    background-color: rgba(255, 255, 255, 0.7); // 70% opaque 
+    color: black;
+    font-size: 2rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    width: 100%;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); // Arcade-style shadow
+    border: 3px solid rgb(255, 37, 172);
+    transition: transform 0.3s;
+    -webkit-text-stroke: 1px rgb(0, 85, 44);
+
+    &:hover {
+      transform: scale(1.05); // Slightly grow on hover
     }
   }
-  
+}

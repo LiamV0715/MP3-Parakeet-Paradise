@@ -90,10 +90,12 @@ const Login = () => {
                 Register
               </button>
             </form>
+            <div className="bird-image-container">
             <img src={blueBird} alt="Blue Bird" className="blue-bird" />
             <img src={greenBird} alt="Green Bird" className="green-bird" />
             <img src={pinkBird} alt="Pink Bird" className="pink-bird" />
             <img src={yellowBird} alt="Yellow Bird" className="yellow-bird" />
+            </div>
           </>
         ) : (
           <>

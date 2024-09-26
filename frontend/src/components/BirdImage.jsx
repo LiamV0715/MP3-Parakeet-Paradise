@@ -5,6 +5,7 @@ import pinkBird from '../assets/images/pinkBird.png';
 import greenBird from '../assets/images/greenBird.png';
 import yellowBird from '../assets/images/yellowBird.png';
 
+
 const BirdImage = () => {
   const { authState } = useContext(AuthContext);
   
@@ -34,6 +35,12 @@ const BirdImage = () => {
           src={getBirdImage(birdColor)} 
           alt={`${birdColor} bird`} 
           className="responsive-bird" 
+          style={{
+            maxWidth: '750px',
+            maxHeight: '750px',
+            display: 'flex',
+            marginTop: '25%',
+          }}
         />
       ) : (
         <p>No bird color selected</p>  

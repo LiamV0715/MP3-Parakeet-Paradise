@@ -76,7 +76,9 @@ const MainMenu = () => {
           {authState.user ? "Log Out" : "Log In"}
         </button>
       </div>
+      <div className="birdShrink">
       <BirdImage className="bird-image-menu" />
+      </div>
     </div>
   );
 };

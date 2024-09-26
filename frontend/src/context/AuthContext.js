@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com//api/auth/me', {
+        const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com/api/auth/me', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
 
   const fetchFishScores = async () => {
     try {
-      const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com//api/fish-score'); 
+      const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com/api/fish-score'); 
       setFishScores(response.data);
     } catch (error) {
       console.error('Error fetching fish scores:', error);
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
 
   const fetchSurfScores = async () => {
     try {
-      const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com//api/surf-score'); 
+      const response = await axios.get('https://mp3-parakeet-paradise-api.onrender.com/api/surf-score'); 
       setSurfScores(response.data);
     } catch (error) {
       console.error('Error fetching surf scores:', error);
@@ -77,7 +77,7 @@ const AuthProvider = ({ children }) => {
   }, []);
   const login = async (username, password) => {
   try {
-    const response = await axios.post('https://mp3-parakeet-paradise-api.onrender.com//api/auth/login', {
+    const response = await axios.post('https://mp3-parakeet-paradise-api.onrender.com/api/auth/login', {
       username,
       password,
     });
@@ -105,7 +105,7 @@ const AuthProvider = ({ children }) => {
 
   const signup = async (username, password, birdColor) => {
     try {
-      const response = await axios.post('https://mp3-parakeet-paradise-api.onrender.com//api/auth/signup', {
+      const response = await axios.post('https://mp3-parakeet-paradise-api.onrender.com/api/auth/signup', {
         username,
         password,
         birdColor,
@@ -132,7 +132,7 @@ const AuthProvider = ({ children }) => {
   
     try {
       const response = await axios.post(
-        "https://mp3-parakeet-paradise-api.onrender.com//api/fish-score",
+        "https://mp3-parakeet-paradise-api.onrender.com/api/fish-score",
         { fishWeight: Number(weight) },
         {
           headers: {
@@ -155,7 +155,7 @@ const AuthProvider = ({ children }) => {
   
     try {
       const response = await axios.post(
-        "https://mp3-parakeet-paradise-api.onrender.com//api/surf-score",
+        "https://mp3-parakeet-paradise-api.onrender.com/api/surf-score",
         { stylePoints: Number(score) },
         {
           headers: {

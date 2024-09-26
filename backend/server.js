@@ -14,7 +14,7 @@ const app = express();
 // Configure CORS
 app.use(
   cors({
-    origin: "https://mp-3-parakeet-paradise-8ux0rgl7a-liam-vermettes-projects.vercel.app", 
+    origin: "mp-3-parakeet-paradise-git-main-liam-vermettes-projects.vercel.app", 
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

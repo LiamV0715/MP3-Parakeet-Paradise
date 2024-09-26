@@ -67,7 +67,7 @@ const Scoreboard = () => {
     } else if (visibleScoreboard === "fish") {
       return (
         <div>
-          <h2>Fish Scores</h2>
+          <h2>Biggest Fish!</h2>
           <ul>
             {fishScores.length > 0 ? (
               fishScores.map((data, index) => (

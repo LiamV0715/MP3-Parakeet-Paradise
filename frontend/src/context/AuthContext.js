@@ -106,7 +106,7 @@ const AuthProvider = ({ children }) => {
   const signup = async (username, password, birdColor) => {
     try {
       const response = await axios.post('https://mp3-parakeet-paradise-api.onrender.com/api/auth/signup', {
-        username,
+        username, 
         password,
         birdColor,
       });

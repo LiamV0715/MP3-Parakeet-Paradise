@@ -57,9 +57,19 @@ View your standings on three leaderboards:
 1. MongoDB Atlas with Mongoose ORM to store users, surfing, and fishing scores in separate collections
 2. JWT for secure token-based authentication
 
+### Deployment
+
+1. The back end is deployed on Render as an API
+URL: https://mp3-parakeet-paradise-api.onrender.com
+
+2. The front end is deployed on Vercel as a static site
+URL:https://mp-3-parakeet-paradise-git-main-liam-vermettes-projects.vercel.app/
+
 ---
 
 ## Bugs and Unfinished Features
+Backend Startup Delay: the API host, Render, spins down when not in use, and spins back up when it is contacted. The first time a logged in user or registering user accesses the site after no one uses it for more than ten minutes, the next page of the site won't appear/progress to the menu for at least 50 seconds with the proper user data. The user will know it worked via the username displayed in the main menu.
+
 Immediate Fish Spawning in Fishing Game: After restarting the fishing mini-game, there's a chance that the fish appears instantly, which goes from funny to frustrating when it happens consecutively.
 
 Leaderboard Crowns/Portrait: Adding a crown to the conditionally rendered scoreboards proved more time consuming then expected, let alone making/positioning the correct bird color as a portrait.

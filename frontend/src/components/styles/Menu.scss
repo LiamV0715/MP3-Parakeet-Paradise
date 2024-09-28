@@ -29,7 +29,7 @@ h2 {
 .behind-video {
     
      position: absolute;
-     z-index: 10; /* Ensures content is layered under the vhs effect */
+     z-index: 10; /* Ensures top layer */
      padding: 20px;
      top: 20px;
      right: 50px;
@@ -110,9 +110,10 @@ button {
     position: absolute;
     top: 10%;     
     left: 0;      
-    width: 10vw;  
+    width: 20vw;  
     height: auto; 
-    max-width: 500px;
-    max-height: 400px;
+    max-width: 600px;
+    max-height: 600px;
+    z-index: 2;
   }
   

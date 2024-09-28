@@ -5,6 +5,7 @@ import BirdImage from "../BirdImage";
 import { AuthContext } from "../../context/AuthContext";
 import VHSintro from "../../assets/videos/VHSbig.gif";
 import backVid from "../../assets/videos/beach.gif";
+import Logo from "../../assets/images/Logo.png"
 
 const MainMenu = () => {
   const { authState, setAuthState } = useContext(AuthContext);
@@ -78,6 +79,7 @@ const MainMenu = () => {
       </div>
       <div className="birdShrink">
       <BirdImage className="bird-image-menu" />
+      <img src={Logo} className="logo"/>
       </div>
     </div>
   );

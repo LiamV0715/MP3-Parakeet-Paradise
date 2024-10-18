@@ -10,7 +10,7 @@ const Scoreboard = () => {
   const handleBackToMenu = () => {
     navigate("/"); // Navigates to the main menu page
   };
-  // Helper function to combine and sum fish and surf scores
+
   // Helper function to combine and sum fish and surf scores, and sort by total score
   const combineScores = () => {
     const combined = {};
@@ -41,7 +41,6 @@ const Scoreboard = () => {
       }))
       .sort((a, b) => b.totalScore - a.totalScore); // Sort in descending order by totalScore
   };
-  // et voila
 
   const combinedScores = combineScores(); // Get combined scores
 
@@ -53,7 +52,7 @@ const Scoreboard = () => {
           <h2>All Around Parakeet Crown</h2>
           <ul>
             {combinedScores.length > 0 ? (
-              combinedScores.map((data, index) => (
+              combinedScores.slice(0, 7).map((data, index) => (
                 <li key={index}>
                   {index + 1}. {data.username}: {data.totalScore} total points
                 </li>
@@ -70,7 +69,7 @@ const Scoreboard = () => {
           <h2>Biggest Fish</h2>
           <ul>
             {fishScores.length > 0 ? (
-              fishScores.map((data, index) => (
+              fishScores.slice(0, 7).map((data, index) => (
                 <li key={data._id}>
                   {index + 1}. {data.user.username}: {data.fishWeight} lbs
                 </li>
@@ -87,10 +86,9 @@ const Scoreboard = () => {
           <h2>Gnarliest Surf</h2>
           <ul>
             {surfScores.length > 0 ? (
-              surfScores.map((data, index) => (
+              surfScores.slice(0, 7).map((data, index) => (
                 <li key={data._id}>
-                  {index + 1}. {data.user.username}: {data.stylePoints} style
-                  points
+                  {index + 1}. {data.user.username}: {data.stylePoints} style points
                 </li>
               ))
             ) : (
